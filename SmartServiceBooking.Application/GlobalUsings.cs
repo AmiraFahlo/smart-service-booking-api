@@ -1,0 +1,12 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using MediatR;
+global using Microsoft.EntityFrameworkCore;
+global using SmartServiceBooking.Application.Common.Interfaces;
+global using SmartServiceBooking.Domain.Shared;
+global using SmartServiceBooking.Application.Common.Extensions;
+global using SmartServiceBooking.Application.Features.Services.Extensions;
+global using SmartServiceBooking.Application.Features.ServiceProvider.Extensions;

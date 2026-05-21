@@ -1,0 +1,146 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "ApplicationDbContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "MinimumProductVersion": "2.6.0",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "SmartServiceBooking.Infrastructure.Persistence",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[Booking].[Bookings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Booking].[BookingStatusHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Common].[Addresses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Common].[Cities]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Common].[Countries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetRoleClaims]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserClaims]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserLogins]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Notifications]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Identity].[Roles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Identity].[UserRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Identity].[Users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Identity].[UserTokens]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Interaction].[Reviews]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Payment].[Invoices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Payment].[PaymentMethods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Payment].[Transactions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Payment].[Wallets]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Service].[Categories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Service].[ProviderAvailability]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Service].[ProviderServices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Service].[ServiceProviders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Service].[Services]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[System].[AppSettings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[System].[AuditLogs]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

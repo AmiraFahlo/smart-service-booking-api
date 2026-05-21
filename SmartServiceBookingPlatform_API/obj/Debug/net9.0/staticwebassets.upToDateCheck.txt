@@ -1,0 +1,2 @@
+D:\Desktop\SmartServiceBookingPlatform_API\SmartServiceBookingPlatform_API\wwwroot\api-landing.html
+wwwroot\api-landing.html

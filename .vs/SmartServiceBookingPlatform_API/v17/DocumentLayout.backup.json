@@ -1,0 +1,92 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Desktop\\SmartServiceBookingPlatform_API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|d:\\desktop\\smartservicebookingplatform_api\\smartservicebooking.domain\\entities\\identity\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|solutionrelative:smartservicebooking.domain\\entities\\identity\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|d:\\desktop\\smartservicebookingplatform_api\\smartservicebooking.domain\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|solutionrelative:smartservicebooking.domain\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|d:\\desktop\\smartservicebookingplatform_api\\smartservicebooking.domain\\entities\\identity\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|solutionrelative:smartservicebooking.domain\\entities\\identity\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|d:\\desktop\\smartservicebookingplatform_api\\smartservicebooking.domain\\entities\\booking\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E72783C-6708-4850-AC11-F194F9B2F39E}|SmartServiceBooking.Domain\\SmartServiceBooking.Domain.csproj|solutionrelative:smartservicebooking.domain\\entities\\booking\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationUser.cs",
+              "ToolTip": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationUser.cs",
+              "RelativeToolTip": "SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-14T17:18:45.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationRole.cs",
+              "DocumentMoniker": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationRole.cs",
+              "RelativeDocumentMoniker": "SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationRole.cs",
+              "ToolTip": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationRole.cs",
+              "RelativeToolTip": "SmartServiceBooking.Domain\\Entities\\Identity\\ApplicationRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-14T17:18:11.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GlobalUsings.cs",
+              "DocumentMoniker": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\GlobalUsings.cs",
+              "RelativeDocumentMoniker": "SmartServiceBooking.Domain\\GlobalUsings.cs",
+              "ToolTip": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\GlobalUsings.cs",
+              "RelativeToolTip": "SmartServiceBooking.Domain\\GlobalUsings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-14T17:17:22.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Booking.cs",
+              "DocumentMoniker": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Booking\\Booking.cs",
+              "RelativeDocumentMoniker": "SmartServiceBooking.Domain\\Entities\\Booking\\Booking.cs",
+              "ToolTip": "D:\\Desktop\\SmartServiceBookingPlatform_API\\SmartServiceBooking.Domain\\Entities\\Booking\\Booking.cs",
+              "RelativeToolTip": "SmartServiceBooking.Domain\\Entities\\Booking\\Booking.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-14T17:17:05.997Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

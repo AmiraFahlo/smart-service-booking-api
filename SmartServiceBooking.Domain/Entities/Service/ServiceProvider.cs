@@ -1,0 +1,76 @@
+using SmartServiceBooking.Domain.Entities.Base;
+using SmartServiceBooking.Domain.Entities.Identity;
+
+namespace SmartServiceBooking.Domain.Entities.Service;
+
+public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
+{
+    private ServiceProvider() { }
+
+    public int UserId { get; private set; }
+    public string? BusinessName { get; private set; }
+    public string? Bio { get; private set; }
+    public decimal Rating { get; private set; }
+    public int ReviewCount { get; private set; }
+    public bool IsVerified { get; private set; }
+    public decimal CommissionRate { get; private set; }
+    public ApplicationUser? User { get; private set; }
+    public ICollection<ProviderService> Services { get; private set; } = new HashSet<ProviderService>();
+    public ICollection<ProviderAvailability> Availabilities { get; private set; } = new HashSet<ProviderAvailability>();
+    public ICollection<Booking.Booking> Bookings { get; private set; } = new HashSet<Booking.Booking>();
+
+    public static ServiceProvider Create(
+        int userId,
+        string? businessName = null,
+        string? bio = null,
+        decimal rating = 0m,
+        int reviewCount = 0,
+        bool isVerified = false,
+        decimal commissionRate = 0m,
+        int? id = null,
+        DateTime? createdAt = null)
+    {
+        var provider = new ServiceProvider
+        {
+            UserId = userId,
+            BusinessName = businessName,
+            Bio = bio,
+            Rating = rating,
+            ReviewCount = reviewCount,
+            IsVerified = isVerified,
+            CommissionRate = commissionRate
+        };
+
+        if (id.HasValue)
+            provider.Id = id.Value;
+
+        if (createdAt.HasValue)
+            provider.SetAudit(createdAt.Value);
+
+        return provider;
+    }
+
+    public void Update(string? businessName, string? bio, decimal commissionRate, bool isVerified)
+    {
+        BusinessName = businessName;
+        Bio = bio;
+        CommissionRate = commissionRate;
+        IsVerified = isVerified;
+    }
+
+    /// <summary>
+    /// Marks the provider as deleted (Soft Delete).
+    /// </summary>
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+    }
+
+    /// <summary>
+    /// Restores a soft-deleted provider.
+    /// </summary>
+    public void Restore()
+    {
+        IsDeleted = false;
+    }
+}
