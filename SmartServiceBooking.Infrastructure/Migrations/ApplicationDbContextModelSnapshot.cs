@@ -491,17 +491,19 @@ namespace SmartServiceBooking.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("ReviewerId");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("RateeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReviewerId")
-                        .HasColumnType("int");
+                    b.Property<int>("ServiceProviderId")
+                        .HasColumnType("int")
+                        .HasColumnName("RateeId");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -511,13 +513,12 @@ namespace SmartServiceBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RateeId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("ReviewerId");
+                    b.HasIndex("ServiceProviderId");
 
-                    b.HasIndex("BookingId", "ReviewerId")
-                        .IsUnique()
-                        .HasFilter("[ReviewerId] IS NOT NULL");
+                    b.HasIndex("BookingId", "CustomerId")
+                        .IsUnique();
 
                     b.ToTable("Reviews", "Interaction");
 
@@ -528,10 +529,10 @@ namespace SmartServiceBooking.Infrastructure.Migrations
                             BookingId = 1L,
                             Comment = "Excellent service! Very thorough cleaning.",
                             CreatedAt = new DateTime(2025, 1, 3, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CustomerId = 1,
                             IsDeleted = false,
-                            RateeId = 1,
                             Rating = 5,
-                            ReviewerId = 1
+                            ServiceProviderId = 1
                         });
                 });
 
@@ -1049,24 +1050,26 @@ namespace SmartServiceBooking.Infrastructure.Migrations
                     b.HasOne("SmartServiceBooking.Domain.Entities.Booking.Booking", "Booking")
                         .WithMany()
                         .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SmartServiceBooking.Domain.Entities.Identity.ApplicationUser", "Ratee")
-                        .WithMany()
-                        .HasForeignKey("RateeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartServiceBooking.Domain.Entities.Identity.ApplicationUser", "Reviewer")
+                    b.HasOne("SmartServiceBooking.Domain.Entities.Identity.ApplicationUser", "Customer")
                         .WithMany()
-                        .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartServiceBooking.Domain.Entities.Service.ServiceProvider", "ServiceProvider")
+                        .WithMany()
+                        .HasForeignKey("ServiceProviderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Booking");
 
-                    b.Navigation("Ratee");
+                    b.Navigation("Customer");
 
-                    b.Navigation("Reviewer");
+                    b.Navigation("ServiceProvider");
                 });
 
             modelBuilder.Entity("SmartServiceBooking.Domain.Entities.Service.Category", b =>

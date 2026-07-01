@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using SmartServiceBookingPlatform_API.Extensions;
 using SmartServiceBooking.Infrastructure;
 using SmartServiceBooking.Application;
-using Microsoft.OpenApi.Models; // For OpenAPI models
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,12 +50,14 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
-app.UseOpenApiDocumentation();
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// OpenAPI/Swagger/Scalar — registered AFTER auth middleware so that
+// RequireAuthorization("AdminOnly") on the spec endpoint is enforced correctly.
+app.UseOpenApiDocumentation();
 
 // Output Cache Middleware — must be AFTER auth and BEFORE MapControllers
 app.UseOutputCaching();
