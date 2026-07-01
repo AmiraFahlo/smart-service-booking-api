@@ -1,18 +1,6 @@
-using MediatR;
-using SmartServiceBooking.Application.Common.Extensions;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
-using SmartServiceBooking.Domain.Constants;
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Domain.Entities.Service;
-
 namespace SmartServiceBooking.Application.Features.Services.Commands.UpdateService;
 
 public class UpdateServiceCommandHandler(
-    IServiceRepository serviceRepository,
     IServiceProviderRepository providerRepository,
     ICurrentUserService currentUserService,
     IApplicationDbContext context,

@@ -1,15 +1,33 @@
-using System;
-using SmartServiceBooking.Domain.Entities.Base;
+namespace SmartServiceBooking.Domain.Entities.Service;
 
-namespace SmartServiceBooking.Domain.Entities.Service
+public class ProviderAvailability : BaseEntity<long>
 {
-    public class ProviderAvailability : BaseEntity<long>
-    {
-        public int ProviderId { get; set; }
-        public int DayOfWeek { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
+    private ProviderAvailability() { } // EF Core required
 
-        public ServiceProvider Provider { get; set; }
+    public int ProviderId { get; private set; }
+    public DayOfWeek DayOfWeek { get; private set; }
+    public TimeOnly StartTime { get; private set; }
+    public TimeOnly EndTime { get; private set; }
+
+    public ServiceProvider? Provider { get; private set; }
+
+    public static ProviderAvailability Create(
+        int providerId, 
+        DayOfWeek dayOfWeek, 
+        TimeOnly startTime, 
+        TimeOnly endTime)
+    {
+        if (endTime <= startTime)
+        {
+            throw new ArgumentException("End time must be greater than start time.", nameof(endTime));
+        }
+
+        return new ProviderAvailability
+        {
+            ProviderId = providerId,
+            DayOfWeek = dayOfWeek,
+            StartTime = startTime,
+            EndTime = endTime
+        };
     }
 }

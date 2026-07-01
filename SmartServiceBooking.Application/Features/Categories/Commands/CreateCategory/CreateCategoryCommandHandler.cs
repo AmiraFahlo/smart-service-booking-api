@@ -1,10 +1,3 @@
-using MediatR;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Entities.Service;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace SmartServiceBooking.Application.Features.Categories.Commands.CreateCategory;
 
 public class CreateCategoryCommandHandler(
@@ -24,10 +17,6 @@ public class CreateCategoryCommandHandler(
 
         categoryRepository.Add(category);
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        await cacheInvalidator.InvalidateByTagAsync("categories-tag", cancellationToken);
-
-        return Result.Success(category.Id);
+        return await context.SaveAndInvalidateAsync(category.Id, cacheInvalidator, "categories-tag", cancellationToken);
     }
 }

@@ -579,6 +579,8 @@ namespace SmartServiceBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.HasIndex("ParentId");
 
                     b.ToTable("Categories", "Service");
@@ -626,20 +628,21 @@ namespace SmartServiceBooking.Infrastructure.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("EndTime")
+                    b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
                     b.Property<int>("ProviderId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("StartTime")
+                    b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("ProviderId", "DayOfWeek")
+                        .IsUnique();
 
-                    b.ToTable("ProviderAvailability", "Service");
+                    b.ToTable("ProviderAvailabilities", "Service");
                 });
 
             modelBuilder.Entity("SmartServiceBooking.Domain.Entities.Service.ProviderService", b =>
@@ -749,7 +752,11 @@ namespace SmartServiceBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BasePrice");
+
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Services", "Service");
 
@@ -1077,7 +1084,8 @@ namespace SmartServiceBooking.Infrastructure.Migrations
                     b.HasOne("SmartServiceBooking.Domain.Entities.Service.ServiceProvider", "Provider")
                         .WithMany("Availabilities")
                         .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Provider");
                 });

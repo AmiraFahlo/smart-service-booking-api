@@ -1,5 +1,3 @@
-using SmartServiceBooking.Domain.Entities.Base;
-
 namespace SmartServiceBooking.Domain.Entities.Service
 {
     public class ProviderService : AuditableEntity<long>

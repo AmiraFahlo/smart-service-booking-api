@@ -1,5 +1,3 @@
-using SmartServiceBooking.Domain.Enums;
-
 namespace SmartServiceBooking.Application.Features.Services.Queries.GetServiceById;
 
 public class ServiceDetailDto

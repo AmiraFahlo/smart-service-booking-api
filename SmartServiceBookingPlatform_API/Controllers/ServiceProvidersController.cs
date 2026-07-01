@@ -1,5 +1,3 @@
-
-
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 [Authorize(Roles = $"{Roles.Provider},{Roles.Admin}")]
@@ -7,6 +5,7 @@ public class ServiceProvidersController : ApiControllerBase
 {
     [HttpGet("by-service/{serviceId:long}")]
     [AllowAnonymous]
+    [OutputCache(Tags = ["providers-by-service"])]
     public async Task<IActionResult> GetByService(long serviceId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         return HandleResult(await Sender.Send(new GetProvidersByServiceQuery(serviceId, pageNumber, pageSize)));
@@ -36,6 +35,21 @@ public class ServiceProvidersController : ApiControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         return HandleResult(await Sender.Send(new DeleteServiceProviderCommand(id)));
+    }
+
+    [HttpGet("{id:int}/availability")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAvailability(int id)
+    {
+        return HandleResult(await Sender.Send(new GetProviderAvailabilityQuery(id)));
+    }
+
+    [HttpPut("{id:int}/availability")]
+    [Authorize(Roles = $"{Roles.Provider},{Roles.Admin}")]
+    public async Task<IActionResult> SetAvailability(int id, [FromBody] List<ProviderAvailabilityDto> availabilities)
+    {
+        var command = new SetProviderAvailabilityCommand(id, availabilities);
+        return HandleResult(await Sender.Send(command));
     }
 }
 

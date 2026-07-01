@@ -20,38 +20,89 @@ public class Booking : AuditableEntity<long>, ISoftDeletable
     public ServiceProvider? Provider { get; private set; }
     public ServiceEntity? Service { get; private set; }
 
-    public static Booking Create(
+    /// <summary>
+    /// Factory Method: Always creates a booking in Pending + Unpaid state.
+    /// The Domain owns the initial state — no external caller can bypass this.
+    /// </summary>
+    public static Result<Booking> Create(
         int customerId,
         int providerId,
         long serviceId,
-        BookingStatus bookingStatus,
-        PaymentStatus paymentStatus,
         DateTime scheduledStart,
         DateTime scheduledEnd,
         decimal totalAmount,
-        string? notes = null,
-        long? id = null,
-        DateTime? createdAt = null)
+        string? notes = null)
     {
-        var booking = new Booking
+        if (scheduledStart < DateTime.UtcNow)
+            return Result.Failure<Booking>(BookingErrors.PastDate);
+
+        if (scheduledEnd <= scheduledStart)
+            return Result.Failure<Booking>(BookingErrors.InvalidTimeRange);
+
+        if (scheduledStart.Date != scheduledEnd.Date)
+            return Result.Failure<Booking>(BookingErrors.CrossMidnight);
+
+        return new Booking
         {
             CustomerId = customerId,
             ProviderId = providerId,
             ServiceId = serviceId,
-            BookingStatus = bookingStatus,
-            PaymentStatus = paymentStatus,
+            BookingStatus = BookingStatus.Pending,   // Always start Pending
+            PaymentStatus = PaymentStatus.Unpaid,    // Always start Unpaid
             ScheduledStart = scheduledStart,
             ScheduledEnd = scheduledEnd,
             TotalAmount = totalAmount,
             Notes = notes
         };
+    }
 
-        if (id.HasValue)
-            booking.Id = id.Value;
+    // ─── State Machine ───────────────────────────────────────────────────────
 
-        if (createdAt.HasValue)
-            booking.SetAudit(createdAt.Value);
+    /// <summary>
+    /// Provider accepts the booking. Only allowed from Pending state.
+    /// </summary>
+    public Result Confirm()
+    {
+        if (BookingStatus != BookingStatus.Pending)
+            return Result.Failure(BookingErrors.InvalidTransition(BookingStatus, BookingStatus.Confirmed));
 
-        return booking;
+        BookingStatus = BookingStatus.Confirmed;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Service was delivered. Only allowed from Confirmed state.
+    /// </summary>
+    public Result Complete()
+    {
+        if (BookingStatus != BookingStatus.Confirmed)
+            return Result.Failure(BookingErrors.InvalidTransition(BookingStatus, BookingStatus.Completed));
+
+        BookingStatus = BookingStatus.Completed;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cancels the booking. Not allowed if already Completed.
+    /// </summary>
+    public Result Cancel()
+    {
+        if (BookingStatus == BookingStatus.Completed)
+            return Result.Failure(BookingErrors.CannotCancelCompleted);
+
+        if (BookingStatus == BookingStatus.Cancelled)
+            return Result.Failure(BookingErrors.AlreadyCancelled);
+
+        BookingStatus = BookingStatus.Cancelled;
+        CancelledAt = DateTime.UtcNow;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Marks the booking as paid.
+    /// </summary>
+    public void MarkAsPaid()
+    {
+        PaymentStatus = PaymentStatus.Paid;
     }
 }

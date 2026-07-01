@@ -1,11 +1,3 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-using SmartServiceBooking.Domain.Entities.Service;
-
 using SmartServiceBooking.Domain.Constants;
 
 namespace SmartServiceBooking.Application.Features.Services.Commands.DeleteService;
@@ -32,11 +24,7 @@ public class DeleteServiceCommandHandler(
 
         service.SoftDelete();
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        await cacheInvalidator.InvalidateByTagAsync("services-tag", cancellationToken);
-
-        return Result.Success();
+        return await context.SaveAndInvalidateAsync(cacheInvalidator, "services-tag", cancellationToken);
     }
 
     private async Task<Result> CheckOwnershipAsync(ServiceEntity service, CancellationToken cancellationToken)

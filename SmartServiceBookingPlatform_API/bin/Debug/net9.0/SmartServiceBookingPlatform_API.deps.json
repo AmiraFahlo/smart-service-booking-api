@@ -1037,6 +1037,7 @@
       },
       "SmartServiceBooking.Domain/1.0.0": {
         "dependencies": {
+          "MediatR": "14.0.0",
           "Microsoft.AspNet.Identity.EntityFramework": "2.2.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0"
         },

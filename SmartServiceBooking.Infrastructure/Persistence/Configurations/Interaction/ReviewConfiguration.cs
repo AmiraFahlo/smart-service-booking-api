@@ -9,24 +9,32 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
     public void Configure(EntityTypeBuilder<Review> builder)
     {
         builder.ToTable("Reviews", "Interaction");
+
         builder.Property(r => r.Comment).HasMaxLength(1000);
-        
-        builder.HasIndex(r => new { r.BookingId, r.ReviewerId }).IsUnique();
+
+        builder.Property(r => r.CustomerId)
+            .HasColumnName("ReviewerId");
+
+        builder.Property(r => r.ServiceProviderId)
+            .HasColumnName("RateeId");
+
+        builder.HasIndex(r => new { r.BookingId, r.CustomerId }).IsUnique();
 
         builder.HasOne(r => r.Booking)
             .WithMany()
             .HasForeignKey(r => r.BookingId)
-            .IsRequired(false)
+            .IsRequired(true)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(r => r.Reviewer)
+        builder.HasOne(r => r.Customer)
             .WithMany()
-            .HasForeignKey(r => r.ReviewerId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(r => r.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(r => r.Ratee)
+        builder.HasOne(r => r.ServiceProvider)
             .WithMany()
-            .HasForeignKey(r => r.RateeId)
+            .HasForeignKey(r => r.ServiceProviderId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
+

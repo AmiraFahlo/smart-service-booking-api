@@ -1,5 +1,3 @@
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBooking.Application.Features.Services;
 
 /// <summary>

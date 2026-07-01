@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Domain.Entities.Service;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DomainServiceProvider = SmartServiceBooking.Domain.Entities.Service.ServiceProvider;
-
 namespace SmartServiceBooking.Infrastructure.Persistence.Configurations.Seed;
 
 public class ProviderSeedConfiguration : IEntityTypeConfiguration<DomainServiceProvider>, IEntityTypeConfiguration<ProviderService>

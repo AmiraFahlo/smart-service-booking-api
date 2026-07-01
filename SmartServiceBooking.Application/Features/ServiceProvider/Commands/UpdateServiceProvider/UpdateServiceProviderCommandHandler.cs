@@ -1,13 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using SmartServiceBooking.Application.Common.Interfaces;
 using SmartServiceBooking.Domain.Constants;
-using SmartServiceBooking.Domain.Shared;
 
 namespace SmartServiceBooking.Application.Features.ServiceProvider.Commands.UpdateServiceProvider;
 
 public class UpdateServiceProviderCommandHandler(
     IApplicationDbContext context,
-    ICurrentUserService currentUserService)
+    ICurrentUserService currentUserService,
+    ICacheService cacheService,
+    ICacheInvalidator cacheInvalidator)
     : IRequestHandler<UpdateServiceProviderCommand, Result>
 {
     public async Task<Result> Handle(
@@ -17,10 +17,8 @@ public class UpdateServiceProviderCommandHandler(
         var entity = await context.ServiceProviders
             .FirstOrDefaultAsync(sp => sp.Id == request.Id, cancellationToken);
 
-        if (entity == null)
-        {
+        if (entity is null)
             return Result.Failure(ServiceProviderErrors.NotFound);
-        }
 
         // 🛡️ Authorization Check (Ownership or Admin)
         var isAdmin = currentUserService.IsInRole(Roles.Admin);
@@ -45,6 +43,13 @@ public class UpdateServiceProviderCommandHandler(
         );
 
         await context.SaveChangesAsync(cancellationToken);
+
+        // 🧹 Cache Invalidation: clear stale data so clients see fresh info immediately
+        // 1. Invalidate the provider's profile in Memory Cache
+        await cacheService.RemoveAsync($"provider-availability-{entity.Id}", cancellationToken);
+
+        // 2. Invalidate all "providers-by-service-*" lists via OutputCache tag
+        await cacheInvalidator.InvalidateByTagAsync($"providers-by-service", cancellationToken);
 
         return Result.Success();
     }

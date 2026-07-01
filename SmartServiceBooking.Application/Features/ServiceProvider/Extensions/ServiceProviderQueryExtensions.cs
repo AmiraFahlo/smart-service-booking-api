@@ -1,7 +1,3 @@
-using SmartServiceBooking.Application.Features.ServiceProvider.Queries.GetProvidersByService;
-using SmartServiceBooking.Application.Features.ServiceProvider.Queries.GetServiceProviderById;
-using SmartServiceBooking.Domain.Entities.Service;
-
 namespace SmartServiceBooking.Application.Features.ServiceProvider.Extensions;
 
 public static class ServiceProviderQueryExtensions

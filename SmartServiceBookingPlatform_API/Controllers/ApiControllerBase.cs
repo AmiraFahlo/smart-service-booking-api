@@ -1,9 +1,3 @@
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 [ApiController]

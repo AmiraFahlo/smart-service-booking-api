@@ -1,7 +1,3 @@
-using FluentValidation;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Entities.Service.Specifications;
-
 namespace SmartServiceBooking.Application.Features.Services.Commands.CreateService;
 
 public class CreateServiceCommandValidator : AbstractValidator<CreateServiceCommand>

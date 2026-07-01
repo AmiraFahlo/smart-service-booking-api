@@ -1,14 +1,3 @@
-using SmartServiceBooking.Application.Features.Categories.Commands.CreateCategory;
-using SmartServiceBooking.Application.Features.Categories.Commands.DeleteCategory;
-using SmartServiceBooking.Application.Features.Categories.Commands.RestoreCategory;
-using SmartServiceBooking.Application.Features.Categories.Commands.UpdateCategory;
-using SmartServiceBooking.Application.Features.Categories.Queries.GetCategoriesList;
-using SmartServiceBooking.Application.Features.Categories.Queries.GetCategoryById;
-using SmartServiceBookingPlatform_API.Features.Categories.Requests;
-
-using Microsoft.AspNetCore.Authorization;
-using SmartServiceBooking.Domain.Constants;
-
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 [Authorize(Roles = Roles.Admin)]

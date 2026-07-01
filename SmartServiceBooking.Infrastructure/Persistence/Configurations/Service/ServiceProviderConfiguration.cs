@@ -1,10 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Domain.Entities.Service;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DomainServiceProvider = SmartServiceBooking.Domain.Entities.Service.ServiceProvider;
-
 namespace SmartServiceBooking.Infrastructure.Persistence.Configurations.Service;
-
 public class ServiceProviderConfiguration : IEntityTypeConfiguration<DomainServiceProvider>
 {
     public void Configure(EntityTypeBuilder<DomainServiceProvider> builder)

@@ -25,14 +25,16 @@ public static class DependencyInjection
         // Bind DatabaseOptions
         services.Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.SectionName));
 
-        // Register Interceptor as Singleton
+        // Register Interceptors
         services.AddSingleton<AuditableEntityInterceptor>();
+        services.AddScoped<DispatchDomainEventsInterceptor>();
 
         // Add DbContext
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             var databaseOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
             var auditInterceptor = serviceProvider.GetRequiredService<AuditableEntityInterceptor>();
+            var domainEventsInterceptor = serviceProvider.GetRequiredService<DispatchDomainEventsInterceptor>();
 
             options.UseSqlServer(databaseOptions.ConnectionString, sqlOptions =>
             {
@@ -43,7 +45,7 @@ public static class DependencyInjection
 
                 sqlOptions.CommandTimeout(databaseOptions.CommandTimeout);
             })
-            .AddInterceptors(auditInterceptor);
+            .AddInterceptors(auditInterceptor, domainEventsInterceptor);
 
             if (databaseOptions.EnableDetailedErrors) options.EnableDetailedErrors();
             if (databaseOptions.EnableSensitiveDataLogging) options.EnableSensitiveDataLogging();
@@ -60,6 +62,8 @@ public static class DependencyInjection
         services.AddSingleton(Options.Create(jwtOptions));
 
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddMemoryCache();
+        services.AddScoped<ICacheService, Cache.MemoryCacheService>();
 
         services.AddAuthentication(options =>
         {
@@ -88,6 +92,7 @@ public static class DependencyInjection
         services.AddScoped<IServiceProviderRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.ServiceProviderRepository>();
         services.AddScoped<IServiceRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.ServiceRepository>();
         services.AddScoped<ICategoryRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.CategoryRepository>();
+        services.AddScoped<IBookingRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.BookingRepository>();
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         return services;

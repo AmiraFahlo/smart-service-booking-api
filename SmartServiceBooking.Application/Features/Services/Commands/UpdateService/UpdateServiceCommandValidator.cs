@@ -1,9 +1,4 @@
-using FluentValidation;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Entities.Service.Specifications;
-
 namespace SmartServiceBooking.Application.Features.Services.Commands.UpdateService;
-
 public class UpdateServiceCommandValidator : AbstractValidator<UpdateServiceCommand>
 {
     public UpdateServiceCommandValidator(IServiceRepository serviceRepository)

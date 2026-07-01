@@ -1,16 +1,8 @@
-using MediatR;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Entities.Service;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
 using SmartServiceBooking.Domain.Constants;
 
 namespace SmartServiceBooking.Application.Features.Services.Commands.CreateService;
 
 public class CreateServiceCommandHandler(
-    IServiceRepository serviceRepository,
     IServiceProviderRepository providerRepository,
     ICurrentUserService currentUserService,
     IApplicationDbContext context,
@@ -37,13 +29,9 @@ public class CreateServiceCommandHandler(
         var providerService = ProviderService.Create(providerResult.Value.Id, 0);
         entity.ProviderServices.Add(providerService);
 
-        serviceRepository.Add(entity);
+        context.Services.Add(entity);
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        await cacheInvalidator.InvalidateByTagAsync("services-tag", cancellationToken);
-
-        return Result.Success(entity.Id);
+        return await context.SaveAndInvalidateAsync(entity.Id, cacheInvalidator, "services-tag", cancellationToken);
     }
 
     private async Task<Result<SmartServiceBooking.Domain.Entities.Service.ServiceProvider>> GetAuthorizedProviderAsync(CancellationToken cancellationToken)

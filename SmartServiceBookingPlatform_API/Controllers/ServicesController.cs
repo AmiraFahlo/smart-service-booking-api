@@ -1,13 +1,3 @@
-using SmartServiceBooking.Application.Features.Services.Commands.CreateService;
-using SmartServiceBooking.Application.Features.Services.Commands.DeleteService;
-using SmartServiceBooking.Application.Features.Services.Commands.UpdateService;
-using SmartServiceBooking.Application.Features.Services.Queries.GetServiceById;
-using SmartServiceBooking.Application.Features.Services.Queries.GetServicesList;
-using SmartServiceBookingPlatform_API.Features.Services.Requests;
-
-using Microsoft.AspNetCore.Authorization;
-using SmartServiceBooking.Domain.Constants;
-
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 [Authorize(Roles = $"{Roles.Provider},{Roles.Admin}")]

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using SmartServiceBooking.Domain.Entities.Base;
-
 namespace SmartServiceBooking.Domain.Entities.Service
 {
     public class Category : AuditableEntity, ISoftDeletable

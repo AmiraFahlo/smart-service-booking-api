@@ -1,8 +1,3 @@
-global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Threading;
-global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
@@ -16,3 +11,7 @@ global using SmartServiceBooking.Infrastructure.Persistence.Interceptors;
 global using SmartServiceBooking.Infrastructure.Persistence.Options;
 global using SmartServiceBooking.Domain.Entities.Identity;
 global using System.Text;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using SmartServiceBooking.Domain.Entities.Service;
+global using DomainServiceProvider = SmartServiceBooking.Domain.Entities.Service.ServiceProvider;
+

@@ -1,9 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Domain.Entities.Service;
-using System.Threading;
-using System.Threading.Tasks;
-
-using SmartServiceBooking.Domain.Entities.Identity;
+using SmartServiceBooking.Domain.Entities.Booking;
+using SmartServiceBooking.Domain.Entities.Interaction;
 
 namespace SmartServiceBooking.Application.Common.Interfaces;
 
@@ -15,6 +11,9 @@ public interface IApplicationDbContext
     DbSet<ServiceProvider> ServiceProviders { get; }
     DbSet<ProviderService> ProviderServices { get; }
     DbSet<ProviderAvailability> ProviderAvailabilities { get; }
+    DbSet<Booking> Bookings { get; }
+    DbSet<Review> Reviews { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
+

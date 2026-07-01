@@ -1,7 +1,4 @@
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBooking.Application.Features.ServiceProvider;
-
 public static class ServiceProviderErrors
 {
     public static readonly Error AlreadyExists = new(

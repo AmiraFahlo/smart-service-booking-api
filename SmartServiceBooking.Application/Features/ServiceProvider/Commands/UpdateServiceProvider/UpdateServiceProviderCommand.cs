@@ -1,6 +1,3 @@
-using MediatR;
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBooking.Application.Features.ServiceProvider.Commands.UpdateServiceProvider;
 
 public record UpdateServiceProviderCommand(

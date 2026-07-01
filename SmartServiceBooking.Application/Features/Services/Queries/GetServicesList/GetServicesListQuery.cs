@@ -1,9 +1,4 @@
-using MediatR;
-using SmartServiceBooking.Domain.Shared;
-using System.Collections.Generic;
-
 namespace SmartServiceBooking.Application.Features.Services.Queries.GetServicesList;
-
 public record GetServicesListQuery(
     string? SearchTerm = null,
     int? CategoryId = null,

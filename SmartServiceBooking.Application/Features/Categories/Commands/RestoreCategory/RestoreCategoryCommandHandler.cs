@@ -1,9 +1,3 @@
-using MediatR;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace SmartServiceBooking.Application.Features.Categories.Commands.RestoreCategory;
 
 public class RestoreCategoryCommandHandler(
@@ -24,10 +18,6 @@ public class RestoreCategoryCommandHandler(
         // DDD: domain method handles state restoration
         category.Restore();
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        await cacheInvalidator.InvalidateByTagAsync("categories-tag", cancellationToken);
-
-        return Result.Success();
+        return await context.SaveAndInvalidateAsync(cacheInvalidator, "categories-tag", cancellationToken);
     }
 }

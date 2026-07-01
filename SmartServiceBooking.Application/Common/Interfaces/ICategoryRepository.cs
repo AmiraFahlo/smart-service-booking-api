@@ -1,6 +1,3 @@
-using SmartServiceBooking.Domain.Entities.Service;
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBooking.Application.Common.Interfaces;
 
 public interface ICategoryRepository

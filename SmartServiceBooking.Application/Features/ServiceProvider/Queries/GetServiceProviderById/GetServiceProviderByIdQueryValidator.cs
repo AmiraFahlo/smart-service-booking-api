@@ -1,7 +1,4 @@
-using FluentValidation;
-
 namespace SmartServiceBooking.Application.Features.ServiceProvider.Queries.GetServiceProviderById;
-
 public class GetServiceProviderByIdQueryValidator : AbstractValidator<GetServiceProviderByIdQuery>
 {
     public GetServiceProviderByIdQueryValidator()

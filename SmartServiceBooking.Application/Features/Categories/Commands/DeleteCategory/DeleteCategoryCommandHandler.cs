@@ -1,10 +1,3 @@
-using MediatR;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Entities.Service.Specifications;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace SmartServiceBooking.Application.Features.Categories.Commands.DeleteCategory;
 
 public class DeleteCategoryCommandHandler(
@@ -36,10 +29,6 @@ public class DeleteCategoryCommandHandler(
         // DDD: domain method handles state transition
         category.SoftDelete();
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        await cacheInvalidator.InvalidateByTagAsync("categories-tag", cancellationToken);
-
-        return Result.Success();
+        return await context.SaveAndInvalidateAsync(cacheInvalidator, "categories-tag", cancellationToken);
     }
 }

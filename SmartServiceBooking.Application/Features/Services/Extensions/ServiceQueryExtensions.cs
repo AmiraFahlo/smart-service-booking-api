@@ -36,4 +36,40 @@ public static class ServiceQueryExtensions
             CategoryName = s.Category.Name
         });
     }
+
+    public static IQueryable<ServiceEntity> ApplySearch(this IQueryable<ServiceEntity> query, string? searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return query;
+
+        var likeTerm = $"%{searchTerm.Trim()}%";
+        return query.Where(s => EF.Functions.Like(s.Name, likeTerm) ||
+                                (s.Description != null && EF.Functions.Like(s.Description, likeTerm)) ||
+                                EF.Functions.Like(s.Category.Name, likeTerm));
+    }
+
+    public static IQueryable<ServiceEntity> ApplyFilters(this IQueryable<ServiceEntity> query, int? categoryId, decimal? minPrice, decimal? maxPrice)
+    {
+        if (categoryId.HasValue)
+            query = query.Where(s => s.CategoryId == categoryId.Value);
+
+        if (minPrice.HasValue)
+            query = query.Where(s => s.BasePrice >= minPrice.Value);
+
+        if (maxPrice.HasValue)
+            query = query.Where(s => s.BasePrice <= maxPrice.Value);
+
+        return query;
+    }
+
+    public static IQueryable<ServiceEntity> ApplySorting(this IQueryable<ServiceEntity> query, string? sortBy)
+    {
+        return sortBy?.ToLower() switch
+        {
+            "price_asc" => query.OrderBy(s => s.BasePrice),
+            "price_desc" => query.OrderByDescending(s => s.BasePrice),
+            "name_asc" => query.OrderBy(s => s.Name),
+            _ => query.OrderByDescending(s => s.CreatedAt)
+        };
+    }
 }

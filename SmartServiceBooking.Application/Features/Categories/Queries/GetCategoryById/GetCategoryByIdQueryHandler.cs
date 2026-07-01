@@ -1,10 +1,3 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Shared;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace SmartServiceBooking.Application.Features.Categories.Queries.GetCategoryById;
 
 public class GetCategoryByIdQueryHandler(IApplicationDbContext context)

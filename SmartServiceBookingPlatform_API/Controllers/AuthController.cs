@@ -1,5 +1,3 @@
-using SmartServiceBookingPlatform_API.Features.Auth.Requests;
-
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 public class AuthController : ApiControllerBase

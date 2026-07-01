@@ -1,8 +1,3 @@
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartServiceBooking.Domain.Entities.Service;
-
 namespace SmartServiceBooking.Infrastructure.Persistence.Configurations.Service;
 
 public class ProviderServiceConfiguration : IEntityTypeConfiguration<ProviderService>

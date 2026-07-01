@@ -1,6 +1,3 @@
-using SmartServiceBooking.Domain.Entities.Base;
-using SmartServiceBooking.Domain.Entities.Identity;
-
 namespace SmartServiceBooking.Domain.Entities.Service;
 
 public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
@@ -50,6 +47,9 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
         return provider;
     }
 
+    /// <summary>
+    /// Updates the provider profile. CommissionRate and IsVerified are Admin-only fields.
+    /// </summary>
     public void Update(string? businessName, string? bio, decimal commissionRate, bool isVerified)
     {
         BusinessName = businessName;
@@ -57,6 +57,18 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
         CommissionRate = commissionRate;
         IsVerified = isVerified;
     }
+
+    /// <summary>
+    /// Recalculates the provider's aggregate rating from the reviews table.
+    /// Called by ReviewCreatedEventHandler via Domain Events — not for direct handler use.
+    /// </summary>
+    public void UpdateRating(decimal newAverageRating, int newReviewCount)
+    {
+        Rating = Math.Round(newAverageRating, 2);
+        ReviewCount = newReviewCount;
+    }
+
+
 
     /// <summary>
     /// Marks the provider as deleted (Soft Delete).
@@ -67,10 +79,26 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
     }
 
     /// <summary>
-    /// Restores a soft-deleted provider.
+    /// Restores a soft-deleted provider to active state.
     /// </summary>
     public void Restore()
     {
         IsDeleted = false;
+    }
+
+    /// <summary>
+    /// Atomically restores a soft-deleted provider and applies new profile data.
+    /// Expresses a single Business Intent: "Re-register with updated info."
+    /// CommissionRate is immutable unless explicitly provided (Admin-only privilege).
+    /// </summary>
+    public void RestoreAndUpdate(string? businessName, string? bio, decimal? newCommissionRate = null)
+    {
+        IsDeleted = false;
+        BusinessName = businessName;
+        Bio = bio;
+
+        // CommissionRate is only updated if explicitly provided (Admin-only intent)
+        if (newCommissionRate.HasValue)
+            CommissionRate = newCommissionRate.Value;
     }
 }

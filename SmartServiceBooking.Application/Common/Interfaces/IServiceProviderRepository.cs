@@ -1,5 +1,3 @@
-using SmartServiceBooking.Domain.Entities.Service;
-
 namespace SmartServiceBooking.Application.Common.Interfaces;
 
 public interface IServiceProviderRepository
