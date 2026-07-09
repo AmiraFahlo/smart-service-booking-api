@@ -15,6 +15,9 @@ builder.Services.AddApplicationServices();
 // Register Infrastructure Layer
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
+// Authorization Policies — centralized definitions consumed by controllers & middleware
+builder.Services.AddAuthorizationPolicies();
+
 // Add OpenAPI Documentation (Swagger/Scalar)
 builder.Services.AddOpenApiDocumentation();
 

@@ -25,14 +25,6 @@ public static class OpenApiExtensions
         services.AddOptions<ApiDocumentationOptions>()
                 .BindConfiguration(ApiDocumentationOptions.SectionName);
 
-        // Register the "AdminOnly" authorization policy used to protect the
-        // /openapi/v1.json endpoint when it is exposed in Production.
-        // Requires the caller to be authenticated and hold the "Admin" role.
-        services.AddAuthorizationBuilder()
-                .AddPolicy("AdminOnly", policy =>
-                    policy.RequireAuthenticatedUser()
-                          .RequireRole("Admin"));
-
         services.AddOpenApi("v1", options =>
         {
             // Use a document transformer that resolves IOptions at runtime,
@@ -93,7 +85,7 @@ public static class OpenApiExtensions
                 // Protect the spec endpoint in Production so it cannot be accessed
                 // without a valid JWT that includes the "Admin" role.
                 // Returns 401 for unauthenticated requests, 403 for wrong role.
-                openApiEndpoint.RequireAuthorization("AdminOnly");
+                openApiEndpoint.RequireAuthorization(AuthorizationExtensions.PolicyNames.AdminOnly);
             }
 
             // ── Scalar API Reference UI ───────────────────────────────────────
