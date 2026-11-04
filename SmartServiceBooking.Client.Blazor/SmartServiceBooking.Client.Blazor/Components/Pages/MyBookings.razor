@@ -1,0 +1,206 @@
+@page "/my-bookings"
+@rendermode InteractiveServer
+
+<PageTitle>حجوزاتي - SmartService Booking Platform</PageTitle>
+
+<!-- Header Banner -->
+<div class="bg-primary text-white py-4 mb-4" style="background: var(--primary-gradient) !important;">
+    <div class="container text-center py-2">
+        <h1 class="fw-bold mb-1">إدارة حجوزاتي</h1>
+        <p class="opacity-90 mb-0">تابع حالة طلباتك وحجوزاتك الحالية والسابقة في مكان واحد</p>
+    </div>
+</div>
+
+<div class="container py-3">
+    <!-- Filter Tabs -->
+    <div class="card border-0 shadow-sm rounded-4 p-2 mb-4">
+        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+            <button class="btn @(ActiveTab == "All" ? "btn-primary-gradient" : "btn-light") btn-sm px-3 rounded-3" @onclick='() => ActiveTab = "All"'>
+                الكل (@AllBookings.Count)
+            </button>
+            <button class="btn @(ActiveTab == "Pending" ? "btn-primary-gradient" : "btn-light") btn-sm px-3 rounded-3" @onclick='() => ActiveTab = "Pending"'>
+                <i class="bi bi-hourglass-split me-1 text-warning"></i> قيد الانتظار (@AllBookings.Count(b => b.Status == "Pending"))
+            </button>
+            <button class="btn @(ActiveTab == "Confirmed" ? "btn-primary-gradient" : "btn-light") btn-sm px-3 rounded-3" @onclick='() => ActiveTab = "Confirmed"'>
+                <i class="bi bi-check-circle me-1 text-info"></i> مؤكدة (@AllBookings.Count(b => b.Status == "Confirmed"))
+            </button>
+            <button class="btn @(ActiveTab == "Completed" ? "btn-primary-gradient" : "btn-light") btn-sm px-3 rounded-3" @onclick='() => ActiveTab = "Completed"'>
+                <i class="bi bi-patch-check me-1 text-success"></i> مكتملة (@AllBookings.Count(b => b.Status == "Completed"))
+            </button>
+            <button class="btn @(ActiveTab == "Cancelled" ? "btn-primary-gradient" : "btn-light") btn-sm px-3 rounded-3" @onclick='() => ActiveTab = "Cancelled"'>
+                <i class="bi bi-x-circle me-1 text-danger"></i> ملغاة (@AllBookings.Count(b => b.Status == "Cancelled"))
+            </button>
+        </div>
+    </div>
+
+    <!-- Bookings List -->
+    <div class="row g-4">
+        @if (!FilteredBookings.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-calendar-x fs-1 text-muted d-block mb-3"></i>
+                <h4 class="fw-bold">لا توجد حجوزات في هذه القائمة</h4>
+                <p class="text-muted">قم بتصفح دليل الخدمات واحجز موعدك الأول الآن!</p>
+                <a href="services" class="btn btn-primary-gradient mt-2">
+                    <i class="bi bi-grid me-1"></i> تصفح الخدمات
+                </a>
+            </div>
+        }
+        else
+        {
+            @foreach (var booking in FilteredBookings)
+            {
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 transition-all">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="text-muted small">رقم الحجز: #@booking.BookingNumber</span>
+                                <h4 class="fw-bold text-primary mb-1 mt-1">@booking.ServiceName</h4>
+                                <div class="text-secondary small">
+                                    <i class="bi bi-person me-1"></i> مزود الخدمة: <strong>@booking.ProviderName</strong>
+                                </div>
+                            </div>
+                            <div>
+                                @if (booking.Status == "Pending")
+                                {
+                                    <span class="status-badge status-pending"><i class="bi bi-clock-history"></i> قيد الانتظار</span>
+                                }
+                                else if (booking.Status == "Confirmed")
+                                {
+                                    <span class="status-badge status-confirmed"><i class="bi bi-check-circle"></i> مؤكد</span>
+                                }
+                                else if (booking.Status == "Completed")
+                                {
+                                    <span class="status-badge status-completed"><i class="bi bi-patch-check"></i> مكتمل</span>
+                                }
+                                else if (booking.Status == "Cancelled")
+                                {
+                                    <span class="status-badge status-cancelled"><i class="bi bi-x-circle"></i> ملغى</span>
+                                }
+                            </div>
+                        </div>
+
+                        <hr class="my-2 border-light" />
+
+                        <div class="row g-2 my-2 text-secondary small">
+                            <div class="col-sm-6">
+                                <i class="bi bi-calendar-event me-1 text-primary"></i> <strong>الموعد:</strong> @booking.ScheduledDate.ToString("yyyy/MM/dd") - @booking.ScheduledTime
+                            </div>
+                            <div class="col-sm-6">
+                                <i class="bi bi-geo-alt me-1 text-primary"></i> <strong>الموقع:</strong> @booking.Address
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <div>
+                                <span class="text-muted small d-block">إجمالي المبلغ</span>
+                                <span class="fs-5 fw-extrabold text-success">@booking.TotalPrice.ToString("N0") ل.س</span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                @if (booking.Status == "Pending" || booking.Status == "Confirmed")
+                                {
+                                    <button class="btn btn-outline-danger btn-sm rounded-3 px-3" @onclick="() => CancelBooking(booking)">
+                                        إلغاء الحجز
+                                    </button>
+                                }
+                                @if (booking.Status == "Completed")
+                                {
+                                    <button class="btn btn-outline-custom btn-sm rounded-3 px-3">
+                                        <i class="bi bi-star me-1 text-warning"></i> إضافـة تقييم
+                                    </button>
+                                }
+                                <button class="btn btn-primary-gradient btn-sm rounded-3 px-3" @onclick="() => ViewDetails(booking)">
+                                    التفاصيل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Details Modal -->
+@if (SelectedBookingDetail != null)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 bg-light rounded-top-4">
+                    <h5 class="modal-title fw-bold m-0">تفاصيل الحجز #@SelectedBookingDetail.BookingNumber</h5>
+                    <button type="button" class="btn-close" @onclick="() => SelectedBookingDetail = null"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <span class="text-muted small d-block">اسم الخدمة</span>
+                        <h5 class="fw-bold text-primary m-0">@SelectedBookingDetail.ServiceName</h5>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-muted small d-block">المزود المسؤول</span>
+                        <span class="fw-bold">@SelectedBookingDetail.ProviderName</span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-muted small d-block">تاريخ الموعد والتوقيت</span>
+                        <span class="fw-bold">@SelectedBookingDetail.ScheduledDate.ToString("yyyy/MM/dd") - الساعة @SelectedBookingDetail.ScheduledTime</span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-muted small d-block">العنوان والتفاصيل</span>
+                        <span class="fw-bold">@SelectedBookingDetail.Address</span>
+                    </div>
+                    <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center mb-3">
+                        <span>إجمالي التكلفة:</span>
+                        <span class="fs-4 fw-extrabold text-success">@SelectedBookingDetail.TotalPrice.ToString("N0") ل.س</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary rounded-3" @onclick="() => SelectedBookingDetail = null">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string ActiveTab { get; set; } = "All";
+    private BookingModel? SelectedBookingDetail { get; set; }
+
+    private class BookingModel
+    {
+        public string BookingNumber { get; set; } = "";
+        public string ServiceName { get; set; } = "";
+        public string ProviderName { get; set; } = "";
+        public DateTime ScheduledDate { get; set; }
+        public string ScheduledTime { get; set; } = "";
+        public string Address { get; set; } = "";
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; } = "Pending";
+    }
+
+    private List<BookingModel> AllBookings = new()
+    {
+        new BookingModel { BookingNumber = "BK-9021", ServiceName = "صيانة وفحص إنفيرتر (Inverter)", ProviderName = "م. عمار الحلبي - ورشة النور", ScheduledDate = DateTime.Now.AddDays(2), ScheduledTime = "10:00 AM", Address = "حلب - حي الفرقان (شارع الباسل)", TotalPrice = 150000, Status = "Pending" },
+        new BookingModel { BookingNumber = "BK-8840", ServiceName = "صيانة قواطع وشبكة كهرباء منزلية", ProviderName = "المعلم أبو أحمد الشهابي", ScheduledDate = DateTime.Now.AddDays(1), ScheduledTime = "02:00 PM", Address = "حلب - حي الحمدانية (الحي الرابع)", TotalPrice = 90000, Status = "Confirmed" },
+        new BookingModel { BookingNumber = "BK-7612", ServiceName = "صيانة وضبط محركات المولدات", ProviderName = "مركز الشهباء للميكانيك", ScheduledDate = DateTime.Now.AddDays(-5), ScheduledTime = "09:00 AM", Address = "حلب - حي السليمانية", TotalPrice = 180000, Status = "Completed" },
+        new BookingModel { BookingNumber = "BK-6102", ServiceName = "صيانة وتعبئة غاز مكيفات", ProviderName = "مركز دباغ للتكييف", ScheduledDate = DateTime.Now.AddDays(-10), ScheduledTime = "04:00 PM", Address = "حلب - حي الشهباء", TotalPrice = 225000, Status = "Cancelled" }
+    };
+
+    private IEnumerable<BookingModel> FilteredBookings
+    {
+        get {
+            if (ActiveTab == "All") return AllBookings;
+            return AllBookings.Where(b => b.Status == ActiveTab);
+        }
+    }
+
+    private void CancelBooking(BookingModel booking)
+    {
+        booking.Status = "Cancelled";
+    }
+
+    private void ViewDetails(BookingModel booking)
+    {
+        SelectedBookingDetail = booking;
+    }
+}

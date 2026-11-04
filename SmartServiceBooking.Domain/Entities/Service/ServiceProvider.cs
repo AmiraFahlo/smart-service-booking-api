@@ -11,6 +11,11 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
     public int ReviewCount { get; private set; }
     public bool IsVerified { get; private set; }
     public decimal CommissionRate { get; private set; }
+    public string City { get; private set; } = "حلب";
+    public string? District { get; private set; }
+    public string? AddressDetails { get; private set; }
+    public double? Latitude { get; private set; }
+    public double? Longitude { get; private set; }
     public ApplicationUser? User { get; private set; }
     public ICollection<ProviderService> Services { get; private set; } = new HashSet<ProviderService>();
     public ICollection<ProviderAvailability> Availabilities { get; private set; } = new HashSet<ProviderAvailability>();
@@ -24,6 +29,11 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
         int reviewCount = 0,
         bool isVerified = false,
         decimal commissionRate = 0m,
+        string city = "حلب",
+        string? district = null,
+        string? addressDetails = null,
+        double? latitude = null,
+        double? longitude = null,
         int? id = null,
         DateTime? createdAt = null)
     {
@@ -35,7 +45,12 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
             Rating = rating,
             ReviewCount = reviewCount,
             IsVerified = isVerified,
-            CommissionRate = commissionRate
+            CommissionRate = commissionRate,
+            City = string.IsNullOrWhiteSpace(city) ? "حلب" : city,
+            District = district,
+            AddressDetails = addressDetails,
+            Latitude = latitude,
+            Longitude = longitude
         };
 
         if (id.HasValue)
@@ -50,12 +65,26 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
     /// <summary>
     /// Updates the provider profile. CommissionRate and IsVerified are Admin-only fields.
     /// </summary>
-    public void Update(string? businessName, string? bio, decimal commissionRate, bool isVerified)
+    public void Update(
+        string? businessName,
+        string? bio,
+        decimal commissionRate,
+        bool isVerified,
+        string? city = null,
+        string? district = null,
+        string? addressDetails = null,
+        double? latitude = null,
+        double? longitude = null)
     {
         BusinessName = businessName;
         Bio = bio;
         CommissionRate = commissionRate;
         IsVerified = isVerified;
+        if (!string.IsNullOrWhiteSpace(city)) City = city;
+        if (district != null) District = district;
+        if (addressDetails != null) AddressDetails = addressDetails;
+        if (latitude.HasValue) Latitude = latitude;
+        if (longitude.HasValue) Longitude = longitude;
     }
 
     /// <summary>
@@ -91,7 +120,15 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
     /// Expresses a single Business Intent: "Re-register with updated info."
     /// CommissionRate is immutable unless explicitly provided (Admin-only privilege).
     /// </summary>
-    public void RestoreAndUpdate(string? businessName, string? bio, decimal? newCommissionRate = null)
+    public void RestoreAndUpdate(
+        string? businessName,
+        string? bio,
+        decimal? newCommissionRate = null,
+        string? city = null,
+        string? district = null,
+        string? addressDetails = null,
+        double? latitude = null,
+        double? longitude = null)
     {
         IsDeleted = false;
         BusinessName = businessName;
@@ -100,5 +137,11 @@ public class ServiceProvider : AuditableEntity<int>, ISoftDeletable
         // CommissionRate is only updated if explicitly provided (Admin-only intent)
         if (newCommissionRate.HasValue)
             CommissionRate = newCommissionRate.Value;
+
+        if (!string.IsNullOrWhiteSpace(city)) City = city;
+        if (district != null) District = district;
+        if (addressDetails != null) AddressDetails = addressDetails;
+        if (latitude.HasValue) Latitude = latitude;
+        if (longitude.HasValue) Longitude = longitude;
     }
 }

@@ -1,0 +1,283 @@
+@page "/services"
+@rendermode InteractiveServer
+@using SmartServiceBooking.Shared.DTOs.Services
+
+<PageTitle>الخدمات المتاحة في حلب - SmartService Booking Platform</PageTitle>
+
+<!-- Header Banner -->
+<div class="bg-primary text-white py-4 mb-4" style="background: var(--primary-gradient) !important;">
+    <div class="container text-center py-2">
+        <div class="d-inline-flex align-items-center gap-2 bg-white bg-opacity-25 px-3 py-1 rounded-pill mb-2">
+            <i class="bi bi-geo-alt-fill text-warning"></i>
+            <span class="small fw-bold">محافظة حلب - خدمات الصيانة المنزلية والمهنية</span>
+        </div>
+        <h1 class="fw-bold mb-1">دليل الخدمات المتاحة بحلب</h1>
+        <p class="opacity-90 mb-0">صيانة طاقة شمسية وإنفيرترات، كهرباء وأمبيرات، وميكانيك بأفضل الأسعار بالليرة السورية</p>
+    </div>
+</div>
+
+<div class="container py-3">
+    <div class="row g-4">
+        <!-- Sidebar Filter -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+                <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-funnel text-primary"></i> تصفية الخدمات
+                </h5>
+
+                <!-- Search Input -->
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">اسم الخدمة أو تفاصيلها</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control bg-light border-start-0" @bind="SearchTerm" @bind:event="oninput" placeholder="ابحث مثلاً: إنفيرتر، مكيف..." />
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">التصنيف المهني</label>
+                    <select class="form-select bg-light" @bind="SelectedCategory">
+                        <option value="All">جميع التصنيفات</option>
+                        <option value="طاقة شمسية وبديلة">طاقة شمسية وبديلة</option>
+                        <option value="كهرباء وتمديدات">كهرباء وتمديدات</option>
+                        <option value="ميكانيك ومولدات">ميكانيك ومولدات</option>
+                        <option value="صيانة وتكييف">صيانة وتكييف</option>
+                        <option value="سباكة وصحية">سباكة وصحية</option>
+                    </select>
+                </div>
+
+                <!-- Price Range Filter in SYP -->
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">السعر الأقصى: @MaxPrice.ToString("N0") ل.س</label>
+                    <input type="range" class="form-range" min="50000" max="600000" step="25000" @bind="MaxPrice" />
+                    <div class="d-flex justify-content-between text-muted" style="font-size: 11px;">
+                        <span>50 ألف ل.س</span>
+                        <span>600 ألف ل.س</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-custom w-100 btn-sm" @onclick="ResetFilters">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> إعادة ضبط الفلاتر
+                </button>
+            </div>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted fw-bold">تم العثور على (@FilteredServices.Count()) خدمة في حلب</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted small">ترتيب حسب:</span>
+                    <select class="form-select form-select-sm w-auto bg-white" @bind="SortOrder">
+                        <option value="rating">الأعلى تقييماً</option>
+                        <option value="price-asc">السعر: من الأقل للأعلى</option>
+                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @if (!FilteredServices.Any())
+                {
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-search fs-1 text-muted d-block mb-3"></i>
+                        <h4 class="fw-bold">لم يتم العثور على نتائج</h4>
+                        <p class="text-muted">جرب زيادة السعر الأقصى أو اختيار تصنيف آخر.</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var service in FilteredServices)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <div class="service-card h-100 d-flex flex-column">
+                                <div class="service-card-header">
+                                    <span class="service-badge">@service.CategoryName</span>
+                                    <i class="bi @service.IconClass fs-1 text-primary"></i>
+                                </div>
+                                <div class="service-card-body d-flex flex-column flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="service-title mb-0 fw-bold">@service.Title</h5>
+                                        <div class="service-rating">
+                                            <i class="bi bi-star-fill text-warning"></i> @service.Rating
+                                        </div>
+                                    </div>
+                                    <p class="service-description flex-grow-1">@service.Description</p>
+                                    
+                                    <div class="service-meta mt-auto pt-3 border-top">
+                                        <div>
+                                            <span class="text-muted small d-block">يبدأ من</span>
+                                            <span class="service-price text-success fw-bold">@service.PriceFormattedSYP</span>
+                                            <span class="text-muted small d-block" style="font-size: 11px;">(@service.PriceFormattedUSD)</span>
+                                        </div>
+                                        <button class="btn btn-primary-gradient btn-sm px-3" @onclick="() => OpenBookingModal(service)">
+                                            <i class="bi bi-calendar-check me-1"></i> احجز الآن
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+@if (SelectedServiceForBooking != null)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 bg-light rounded-top-4">
+                    <h5 class="modal-header-title fw-bold m-0">
+                        <i class="bi bi-calendar-plus text-primary me-2"></i> تأكيد حجز خدمة: @SelectedServiceForBooking.Title
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="CloseBookingModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    @if (BookingSubmittedSuccessfully)
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-check-circle-fill text-success display-2 mb-3"></i>
+                            <h4 class="fw-bold text-success">تم تقديم الطلب بنجاح!</h4>
+                            <p class="text-muted mb-4">تم إرسال تفاصيل حجزك للمصلح المعتمد في حلب. سيتم التواصل معك لتأكيد موعد الزيارة.</p>
+                            <button class="btn btn-primary-gradient px-4" @onclick="CloseBookingModal">تم</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 bg-light rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small d-block">التكلفة التقديرية</span>
+                                <span class="fw-bold text-success fs-5">@SelectedServiceForBooking.PriceFormattedSYP</span>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary border">@SelectedServiceForBooking.CategoryName</span>
+                        </div>
+
+                        <!-- District Selection for Customer -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">مكان تقديم الخدمة (حي العميل بحلب)</label>
+                            <select class="form-select" @bind="BookingDistrict">
+                                <option value="الفرقان">الفرقان</option>
+                                <option value="الحمدانية">الحمدانية</option>
+                                <option value="الشهباء">الشهباء</option>
+                                <option value="السليمانية">السليمانية / الميدان</option>
+                                <option value="الموغامبو">الموغامبو</option>
+                                <option value="سيف الدولة">سيف الدولة</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">تاريخ الحجز المفضل</label>
+                            <input type="date" class="form-control" @bind="BookingDate" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">الوقت المفضل</label>
+                            <select class="form-select" @bind="BookingTime">
+                                <option value="09:00 AM">09:00 صباحاً</option>
+                                <option value="11:00 AM">11:00 صباحاً</option>
+                                <option value="02:00 PM">02:00 مساءً</option>
+                                <option value="05:00 PM">05:00 مساءً</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">تفاصيل العطل أو العنوان (اختياري)</label>
+                            <textarea class="form-control" rows="3" @bind="BookingNotes" placeholder="مثال: الشارع، البناء، رقم الطابق، وصف العطل..."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-2">
+                            <button type="button" class="btn btn-light" @onclick="CloseBookingModal">إلغاء</button>
+                            <button type="button" class="btn btn-primary-gradient px-4" @onclick="SubmitBooking">
+                                <i class="bi bi-check2-circle me-1"></i> إرسال الطلب
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string SearchTerm { get; set; } = "";
+    private string SelectedCategory { get; set; } = "All";
+    private decimal MaxPrice { get; set; } = 500000;
+    private string SortOrder { get; set; } = "rating";
+    private string BookingDistrict { get; set; } = "الفرقان";
+
+    private ServiceModel? SelectedServiceForBooking { get; set; }
+    private DateTime BookingDate { get; set; } = DateTime.Now.AddDays(1);
+    private string BookingTime { get; set; } = "10:00 AM";
+    private string BookingNotes { get; set; } = "";
+    private bool BookingSubmittedSuccessfully { get; set; } = false;
+
+    public record ServiceModel(long Id, string Title, string CategoryName, string Description, decimal PriceSYP, decimal PriceUSD, double Rating, string IconClass)
+    {
+        public string PriceFormattedSYP => $"{PriceSYP:N0} ل.س";
+        public string PriceFormattedUSD => $"${PriceUSD:N2}";
+    }
+
+    private List<ServiceModel> AllServices = new()
+    {
+        new(1, "صيانة وفحص إنفيرتر (Inverter)", "طاقة شمسية وبديلة", "كشف أعطال الشحن والتحويل وتبديل موسفتات وبرمجة أنظمة الطاقة والبطاريات بحلب.", 150000, 10.00m, 4.9, "bi-sun"),
+        new(2, "تركيب وضبط منظومة طاقة شمسية", "طاقة شمسية وبديلة", "تركيب وتثبيت القواعد والألواح الشمسية مع التوصيل الدقيق وحماية القواطع.", 300000, 20.00m, 4.95, "bi-brightness-high"),
+        new(3, "صيانة قواطع وشبكة كهرباء منزلية", "كهرباء وتمديدات", "كشف أعطال الشورت والتسريب وفحص لوحات التوزيع وتمديد خطوط أمبير وبديل.", 90000, 6.00m, 4.85, "bi-lightning-charge"),
+        new(4, "صيانة وضبط محركات المولدات المنزلية", "ميكانيك ومولدات", "صيانة كربيراتير وتبديل فلاتر وفحص مارش ودينامو المولدات ومشاكل الإقلاع.", 180000, 12.00m, 4.8, "bi-gear-wide"),
+        new(5, "صيانة مكيف وتعبئة غاز تبريد", "صيانة وتكييف", "تنظيف الفلاتر وفحص الكومبريسور وتعبئة غاز تبريد أصلي للمكيفات والبرادات.", 225000, 15.00m, 4.85, "bi-snow"),
+        new(6, "صيانة مضخات المياه وبالونات الضغط", "سباكة وصحية", "إصلاح توربين المضخة وتبديل مفتاح الأوتوماتيك والبالون وفحص تسريب المياه.", 120000, 8.00m, 4.75, "bi-water")
+    };
+
+    private IEnumerable<ServiceModel> FilteredServices
+    {
+        get {
+            var items = AllServices.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                items = items.Where(s => s.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                         s.Description.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (SelectedCategory != "All")
+            {
+                items = items.Where(s => s.CategoryName == SelectedCategory);
+            }
+
+            items = items.Where(s => s.PriceSYP <= MaxPrice);
+
+            return SortOrder switch
+            {
+                "price-asc" => items.OrderBy(s => s.PriceSYP),
+                "price-desc" => items.OrderByDescending(s => s.PriceSYP),
+                _ => items.OrderByDescending(s => s.Rating)
+            };
+        }
+    }
+
+    private void ResetFilters()
+    {
+        SearchTerm = "";
+        SelectedCategory = "All";
+        MaxPrice = 500000;
+        SortOrder = "rating";
+    }
+
+    private void OpenBookingModal(ServiceModel service)
+    {
+        SelectedServiceForBooking = service;
+        BookingSubmittedSuccessfully = false;
+    }
+
+    private void CloseBookingModal()
+    {
+        SelectedServiceForBooking = null;
+    }
+
+    private void SubmitBooking()
+    {
+        BookingSubmittedSuccessfully = true;
+    }
+}

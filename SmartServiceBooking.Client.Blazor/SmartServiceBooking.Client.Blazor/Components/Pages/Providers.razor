@@ -1,0 +1,350 @@
+@page "/providers"
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+
+<PageTitle>مزودو الخدمات في حلب - SmartService Booking Platform</PageTitle>
+
+<!-- Header Banner -->
+<div class="bg-primary text-white py-4 mb-4 shadow-sm" style="background: var(--primary-gradient) !important;">
+    <div class="container text-center py-2">
+        <div class="d-inline-flex align-items-center gap-2 bg-white bg-opacity-25 px-3 py-1 rounded-pill mb-2">
+            <i class="bi bi-geo-alt-fill text-warning"></i>
+            <span class="small fw-bold">محافظة حلب - شبكة المصلحين المعتمدين</span>
+        </div>
+        <h1 class="fw-bold mb-1">دليل مصلحي أحياء حلب المعتمدين</h1>
+        <p class="opacity-90 mb-0">ابحث عن أفضل الفنيين في حيك (الفرقان، الحمدانية، الشهباء...) - طاقة شمسية، كهرباء، ميكانيك</p>
+    </div>
+</div>
+
+<div class="container py-2">
+    <!-- Filters & Search Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <div class="row g-3 align-items-center">
+            <!-- Search Text -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label text-muted small fw-bold mb-1">البحث بالاسم أو الخدمة</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-primary"></i></span>
+                    <input type="text" class="form-control bg-light border-start-0" @bind="SearchTerm" @bind:event="oninput" @bind:after="OnFilterChanged" placeholder="مثلاً: إنفيرتر، مولدة، كهرباء..." />
+                </div>
+            </div>
+
+            <!-- District Filter (Aleppo) -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label text-muted small fw-bold mb-1">الحي / المنطقة بحلب</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-danger"></i></span>
+                    <select class="form-select bg-light border-start-0" @bind="SelectedDistrict" @bind:after="OnDistrictChanged">
+                        <option value="All">جميع أحياء حلب</option>
+                        <option value="الفرقان">الفرقان</option>
+                        <option value="الحمدانية">الحمدانية</option>
+                        <option value="الشهباء">الشهباء</option>
+                        <option value="السليمانية">السليمانية / الميدان</option>
+                        <option value="الموغامبو">الموغامبو</option>
+                        <option value="سيف الدولة">سيف الدولة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Specialty Filter -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label text-muted small fw-bold mb-1">نوع التخصص المهني</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-tools text-primary"></i></span>
+                    <select class="form-select bg-light border-start-0" @bind="SelectedSpecialty" @bind:after="OnFilterChanged">
+                        <option value="All">جميع التخصصات</option>
+                        <option value="طاقة شمسية وبديلة">طاقة شمسية وإنفيرتر</option>
+                        <option value="كهرباء وتمديدات">كهرباء وأمبيرات</option>
+                        <option value="ميكانيك ومولدات">ميكانيك ومولدات</option>
+                        <option value="صيانة وتكييف">صيانة وتكييف</option>
+                        <option value="سباكة وصحية">سباكة ومضخات مياه</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="col-lg-2 col-md-6 d-flex align-items-end">
+                <button class="btn btn-outline-custom w-100 py-2 mt-auto" @onclick="ResetFilters">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> إعادة ضبط
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Aleppo Map Section -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white overflow-hidden">
+        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-map-fill text-primary fs-5"></i>
+                <h5 class="fw-bold mb-0">خريطة مصلحي حلب التفاعلية</h5>
+                <span class="badge bg-primary-subtle text-primary fw-bold">@FilteredProviders.Count() مصلح ظاهر</span>
+            </div>
+            <div class="small text-muted">
+                <i class="bi bi-info-circle me-1"></i> انقر على أي موقع لمشاهدة تفاصيل المصلح والتسعير
+            </div>
+        </div>
+
+        <div id="aleppo-map-container" style="height: 380px; width: 100%; border-radius: 14px; z-index: 1;" class="border"></div>
+    </div>
+
+    <!-- Active Filters Summary -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-dark">المصلحون المتاحون:</span>
+            <span class="badge bg-light text-dark border px-3 py-2">
+                @if (SelectedDistrict == "All")
+                {
+                    <span>كل حلب</span>
+                }
+                else
+                {
+                    <span>حي @SelectedDistrict</span>
+                }
+                @if (SelectedSpecialty != "All")
+                {
+                    <span> • @SelectedSpecialty</span>
+                }
+            </span>
+        </div>
+        <span class="text-muted small">الأسعار معروضة بـ <strong class="text-success">الليرة السورية (ل.س)</strong> والدولار ($)</span>
+    </div>
+
+    <!-- Providers Grid -->
+    <div class="row g-4">
+        @if (!FilteredProviders.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-emoji-neutral fs-1 text-muted d-block mb-2"></i>
+                <h5 class="fw-bold text-secondary">لا يوجد مصلحين مطابقين لبحثك حالياً</h5>
+                <p class="text-muted small">جرب اختيار حي آخر مثل (الفرقان أو الحمدانية) أو إعادة ضبط الفلاتر.</p>
+                <button class="btn btn-sm btn-primary-gradient px-4" @onclick="ResetFilters">عرض كافة المصلحين</button>
+            </div>
+        }
+        else
+        {
+            @foreach (var provider in FilteredProviders)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 transition-all provider-card position-relative">
+                        @if (provider.IsVerified)
+                        {
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                <i class="bi bi-patch-check-fill me-1"></i> معتمد
+                            </span>
+                        }
+
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle text-primary d-flex align-items-center justify-content-center fs-2 fw-bold" 
+                                 style="width: 65px; height: 65px; background: var(--primary-light);">
+                                <i class="bi @provider.IconClass"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1">@provider.Name</h5>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-primary border">@provider.Specialty</span>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                                        <i class="bi bi-geo-alt-fill me-1"></i>حي @provider.District
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-secondary small mb-2 flex-grow-1">@provider.Bio</p>
+
+                        <div class="small text-muted mb-3">
+                            <i class="bi bi-pin-map text-secondary me-1"></i> @provider.AddressDetails
+                        </div>
+
+                        <!-- Price & Stats Badge -->
+                        <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center mb-3 text-center">
+                            <div>
+                                <span class="text-muted small d-block">يبدأ من</span>
+                                <span class="fw-bold text-success fs-6">@provider.PriceFormattedSYP</span>
+                                <span class="text-muted small d-block" style="font-size: 11px;">(@provider.PriceFormattedUSD)</span>
+                            </div>
+                            <div class="border-start border-end px-2">
+                                <span class="text-muted small d-block">التقييم</span>
+                                <span class="fw-bold text-warning"><i class="bi bi-star-fill"></i> @provider.Rating</span>
+                                <span class="text-muted small d-block" style="font-size: 11px;">(@provider.CompletedJobs حجز)</span>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block">الخبرة</span>
+                                <span class="fw-bold text-dark">@provider.ExperienceYears سنوات</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Actions -->
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-outline-primary btn-sm flex-fill" @onclick="() => FocusOnMap(provider)">
+                                <i class="bi bi-geo me-1"></i> على الخريطة
+                            </button>
+                            <a href="services" class="btn btn-primary-gradient btn-sm flex-fill text-center">
+                                <i class="bi bi-calendar-check me-1"></i> حجز الخدمة
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<style>
+    .provider-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .provider-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg) !important;
+    }
+</style>
+
+@code {
+    private string SearchTerm { get; set; } = "";
+    private string SelectedDistrict { get; set; } = "All";
+    private string SelectedSpecialty { get; set; } = "All";
+    private bool mapInitialized = false;
+
+    public record AleppoProviderModel(
+        long Id, 
+        string Name, 
+        string Specialty, 
+        string City, 
+        string District, 
+        string AddressDetails,
+        double Latitude,
+        double Longitude,
+        string Bio, 
+        decimal PriceSYP,
+        decimal PriceUSD,
+        double Rating, 
+        int CompletedJobs, 
+        int ExperienceYears, 
+        string IconClass,
+        bool IsVerified)
+    {
+        public string PriceFormattedSYP => $"{PriceSYP:N0} ل.س";
+        public string PriceFormattedUSD => $"${PriceUSD:N2}";
+    }
+
+    private List<AleppoProviderModel> ProvidersList = new()
+    {
+        new(1, "م. عمار الحلبي - ورشة النور", "طاقة شمسية وبديلة", "حلب", "الفرقان", "الفرقان - شارع الباسل قرب دوار الصخرة", 36.2085, 37.1175, "مهندس طاقة بديلة متخصص في كشف وتصليح أعطال الإنفيرترات وبرمجة أنظمة الطاقة والبطاريات.", 150000m, 10.00m, 4.9, 42, 8, "bi-sun-fill", true),
+        new(2, "المعلم أبو أحمد الشهابي", "كهرباء وتمديدات", "حلب", "الحمدانية", "الحمدانية - الحي الرابع جانب مدرسة الباسل", 36.1832, 37.1082, "فني كهرباء منازل وفلل معتمد لكشف أعطال القواطع والشورت وتمديد شبكات الأمبير والبديل.", 90000m, 6.00m, 4.8, 35, 12, "bi-lightning-charge-fill", true),
+        new(3, "مركز الشهباء للميكانيك والمولدات", "ميكانيك ومولدات", "حلب", "السليمانية", "السليمانية - نزلة الكنيسة جانب مشفى الميدان", 36.2160, 37.1550, "ورشة متكاملة لصيانة محركات مولدات البنزين والديزل وميكانيك السيارات ولف الدينامو.", 180000m, 12.00m, 4.75, 28, 15, "bi-gear-wide-connected", true),
+        new(4, "مركز دباغ للتكييف والتبريد", "صيانة وتكييف", "حلب", "الشهباء", "الشهباء الجديدة - شارع مدرسة الشروق", 36.2250, 37.1260, "صيانة أجهزة التكييف والبرادات وتعبئة غاز فريون أصلي وكشف تسريب دارات التبريد.", 225000m, 15.00m, 4.85, 24, 9, "bi-snow", true),
+        new(5, "ورشة الصباغ للسباكة والمضخات", "سباكة وصحية", "حلب", "الموغامبو", "الموغامبو - خلف كلية الهندسة المدنية", 36.2150, 37.1250, "كشف تسربات المياه وصيانة المضخات وتوربينات السحب وبالونات الضغط الأوتوماتيكية.", 120000m, 8.00m, 4.7, 19, 7, "bi-droplet-fill", true),
+        new(6, "المهندس فراس للتمديدات والمراقبة", "كهرباء وتمديدات", "حلب", "الفرقان", "الفرقان - دوار الشرطة شارع النيل", 36.2120, 37.1190, "تركيب كاميرات مراقبة وأجهزة إنذار وأنتركم وصيانة لوحات التغذية والكهرباء.", 100000m, 6.50m, 4.8, 31, 6, "bi-camera-video-fill", false)
+    };
+
+    private IEnumerable<AleppoProviderModel> FilteredProviders
+    {
+        get
+        {
+            var items = ProvidersList.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                items = items.Where(p => p.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                         p.Bio.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                         p.Specialty.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (SelectedDistrict != "All")
+            {
+                items = items.Where(p => p.District == SelectedDistrict);
+            }
+
+            if (SelectedSpecialty != "All")
+            {
+                items = items.Where(p => p.Specialty == SelectedSpecialty);
+            }
+
+            return items.OrderByDescending(p => p.Rating);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(300); // allow container render
+            await InitializeMapAsync();
+        }
+    }
+
+    private async Task InitializeMapAsync()
+    {
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("aleppoMap.init", "aleppo-map-container", 36.2021, 37.1343, 13);
+            mapInitialized = true;
+            await UpdateMapMarkersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Map initialization error: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateMapMarkersAsync()
+    {
+        if (!mapInitialized) return;
+
+        var markersData = FilteredProviders.Select(p => new
+        {
+            id = p.Id,
+            name = p.Name,
+            specialty = p.Specialty,
+            district = p.District,
+            latitude = p.Latitude,
+            longitude = p.Longitude,
+            price = p.PriceSYP,
+            priceFormattedSYP = p.PriceFormattedSYP,
+            priceInUSD = p.PriceUSD,
+            priceFormattedUSD = p.PriceFormattedUSD,
+            rating = p.Rating,
+            reviewCount = p.CompletedJobs
+        }).ToList();
+
+        await JSRuntime.InvokeVoidAsync("aleppoMap.setMarkers", markersData);
+    }
+
+    private async Task OnFilterChanged()
+    {
+        await UpdateMapMarkersAsync();
+    }
+
+    private async Task OnDistrictChanged()
+    {
+        await UpdateMapMarkersAsync();
+
+        // Pan map directly to selected district center
+        (double lat, double lng) = SelectedDistrict switch
+        {
+            "الفرقان" => (36.2085, 37.1175),
+            "الحمدانية" => (36.1832, 37.1082),
+            "الشهباء" => (36.2250, 37.1260),
+            "السليمانية" => (36.2160, 37.1550),
+            "الموغامبو" => (36.2150, 37.1250),
+            "سيف الدولة" => (36.1980, 37.1200),
+            _ => (36.2021, 37.1343)
+        };
+
+        await JSRuntime.InvokeVoidAsync("aleppoMap.focusLocation", lat, lng, SelectedDistrict == "All" ? 13 : 15);
+    }
+
+    private async Task FocusOnMap(AleppoProviderModel provider)
+    {
+        await JSRuntime.InvokeVoidAsync("aleppoMap.focusLocation", provider.Latitude, provider.Longitude, 16);
+    }
+
+    private async Task ResetFilters()
+    {
+        SearchTerm = "";
+        SelectedDistrict = "All";
+        SelectedSpecialty = "All";
+        await UpdateMapMarkersAsync();
+        await JSRuntime.InvokeVoidAsync("aleppoMap.focusLocation", 36.2021, 37.1343, 13);
+    }
+}

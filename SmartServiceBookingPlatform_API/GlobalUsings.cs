@@ -34,3 +34,9 @@ global using SmartServiceBooking.Application.Features.Bookings.Commands.CancelBo
 global using SmartServiceBooking.Application.Features.Bookings.Queries.GetMyBookings;
 global using SmartServiceBooking.Application.Features.Bookings.Queries.GetProviderBookings;
 global using SmartServiceBooking.Application.Features.Bookings.Queries.GetBookingById;
+global using SmartServiceBooking.Shared.DTOs.Bookings;
+global using SmartServiceBooking.Shared.DTOs.Categories;
+global using SmartServiceBooking.Shared.DTOs.Reviews;
+global using SmartServiceBooking.Shared.DTOs.ServiceProvider;
+global using SmartServiceBooking.Shared.DTOs.Services;
+

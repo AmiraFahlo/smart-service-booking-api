@@ -20,7 +20,7 @@ public class BookingSeedConfiguration : IEntityTypeConfiguration<BookingEntity>
                 PaymentStatus = PaymentStatus.Paid,
                 ScheduledStart = new DateTime(2025, 1, 2, 10, 0, 0, DateTimeKind.Utc),
                 ScheduledEnd = new DateTime(2025, 1, 2, 13, 0, 0, DateTimeKind.Utc),
-                TotalAmount = 180.00m,
+                TotalAmount = 150000.00m,
                 CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 IsDeleted = false
             },
@@ -29,12 +29,12 @@ public class BookingSeedConfiguration : IEntityTypeConfiguration<BookingEntity>
                 Id = 2L,
                 CustomerId = 2,
                 ProviderId = 2,
-                ServiceId = 2L,
+                ServiceId = 3L,
                 BookingStatus = BookingStatus.Pending,
                 PaymentStatus = PaymentStatus.Unpaid,
                 ScheduledStart = new DateTime(2025, 1, 3, 15, 0, 0, DateTimeKind.Utc),
                 ScheduledEnd = new DateTime(2025, 1, 3, 16, 0, 0, DateTimeKind.Utc),
-                TotalAmount = 35.00m,
+                TotalAmount = 90000.00m,
                 CreatedAt = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc),
                 IsDeleted = false
             }

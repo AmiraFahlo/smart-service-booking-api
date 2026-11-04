@@ -33,6 +33,7 @@ public static class ServiceQueryExtensions
             Name = s.Name,
             Description = s.Description,
             BasePrice = s.BasePrice,
+            PriceInUSD = s.PriceInUSD,
             CategoryName = s.Category.Name
         });
     }

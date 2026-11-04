@@ -1,14 +1,32 @@
+using SmartServiceBooking.Application.Features.ServiceProvider.Queries.GetProvidersList;
+
 namespace SmartServiceBookingPlatform_API.Controllers;
 
 [Authorize(Roles = $"{Roles.Provider},{Roles.Admin}")]
 public class ServiceProvidersController : ApiControllerBase
 {
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? district = null,
+        [FromQuery] int? categoryId = null,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20)
+    {
+        return HandleResult(await Sender.Send(new GetProvidersListQuery(district, categoryId, searchTerm, pageNumber, pageSize)));
+    }
+
     [HttpGet("by-service/{serviceId:long}")]
     [AllowAnonymous]
     [OutputCache(Tags = ["providers-by-service"])]
-    public async Task<IActionResult> GetByService(long serviceId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetByService(
+        long serviceId, 
+        [FromQuery] string? district = null, 
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10)
     {
-        return HandleResult(await Sender.Send(new GetProvidersByServiceQuery(serviceId, pageNumber, pageSize)));
+        return HandleResult(await Sender.Send(new GetProvidersByServiceQuery(serviceId, district, pageNumber, pageSize)));
     }
 
     [HttpGet("{id:int}")]

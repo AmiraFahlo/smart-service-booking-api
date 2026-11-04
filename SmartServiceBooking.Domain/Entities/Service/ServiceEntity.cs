@@ -7,7 +7,8 @@ namespace SmartServiceBooking.Domain.Entities.Service
         public int CategoryId { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public string? Description { get; private set; }
-        public decimal BasePrice { get; private set; }
+        public decimal BasePrice { get; private set; } // In SYP (Syrian Pounds)
+        public decimal? PriceInUSD { get; private set; } // Reference price in USD
         public PriceUnit PriceUnit { get; private set; }
         public bool IsActive { get; private set; }
         public Category Category { get; private set; } = default!;
@@ -18,6 +19,7 @@ namespace SmartServiceBooking.Domain.Entities.Service
             string name,
             decimal basePrice,
             PriceUnit priceUnit,
+            decimal? priceInUSD = null,
             string? description = null,
             bool isActive = true,
             long? id = null,
@@ -28,6 +30,7 @@ namespace SmartServiceBooking.Domain.Entities.Service
                 CategoryId = categoryId,
                 Name = name,
                 BasePrice = basePrice,
+                PriceInUSD = priceInUSD ?? (basePrice > 0 ? Math.Round(basePrice / 15000m, 2) : 0),
                 PriceUnit = priceUnit,
                 Description = description,
                 IsActive = isActive
@@ -51,12 +54,14 @@ namespace SmartServiceBooking.Domain.Entities.Service
             string name,
             decimal basePrice,
             PriceUnit priceUnit,
-            string? description,
-            bool isActive)
+            decimal? priceInUSD = null,
+            string? description = null,
+            bool isActive = true)
         {
             CategoryId = categoryId;
             Name = name;
             BasePrice = basePrice;
+            PriceInUSD = priceInUSD ?? (basePrice > 0 ? Math.Round(basePrice / 15000m, 2) : 0);
             PriceUnit = priceUnit;
             Description = description;
             IsActive = isActive;

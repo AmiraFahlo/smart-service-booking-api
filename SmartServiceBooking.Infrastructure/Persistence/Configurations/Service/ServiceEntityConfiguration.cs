@@ -7,6 +7,7 @@ public class ServiceEntityConfiguration : IEntityTypeConfiguration<ServiceEntity
         builder.ToTable("Services", "Service");
         builder.Property(s => s.Name).HasMaxLength(200).IsRequired();
         builder.Property(s => s.BasePrice).HasColumnType("decimal(18,2)");
+        builder.Property(s => s.PriceInUSD).HasColumnType("decimal(18,2)");
         builder.Property(s => s.PriceUnit).HasConversion<string>();
 
         builder.HasOne(s => s.Category)

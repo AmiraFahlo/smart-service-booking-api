@@ -9,7 +9,8 @@ public class GetProvidersByServiceQueryHandler(
         GetProvidersByServiceQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"providers-by-service-{request.ServiceId}-p{request.PageNumber}-s{request.PageSize}";
+        var districtKey = string.IsNullOrWhiteSpace(request.District) ? "all" : request.District.Trim().ToLower();
+        var cacheKey = $"providers-by-service-{request.ServiceId}-d-{districtKey}-p{request.PageNumber}-s{request.PageSize}";
 
         var result = await cacheService.GetOrCreateAsync(
             cacheKey,
@@ -21,12 +22,19 @@ public class GetProvidersByServiceQueryHandler(
                     .Where(ps => ps.ServiceId == request.ServiceId && 
                                  ps.IsActive && 
                                  ps.Provider != null && 
-                                 !ps.Provider.IsDeleted)
+                                 !ps.Provider.IsDeleted);
+
+                if (!string.IsNullOrWhiteSpace(request.District))
+                {
+                    query = query.Where(ps => ps.Provider!.District == request.District);
+                }
+
+                var lookupQuery = query
                     .OrderByDescending(ps => ps.Provider!.IsVerified) // Top quality first
                     .ThenByDescending(ps => ps.Provider!.Rating)
                     .MapToLookupDto();
 
-                return await query.ToPagedListAsync(
+                return await lookupQuery.ToPagedListAsync(
                     request.PageNumber, 
                     request.PageSize, 
                     cancellationToken);

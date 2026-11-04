@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SmartServiceBookingPlatform_API.Extensions;
 using SmartServiceBooking.Infrastructure;
 using SmartServiceBooking.Application;
 

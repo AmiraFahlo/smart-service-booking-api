@@ -1,0 +1,200 @@
+@page "/"
+@rendermode InteractiveServer
+@using SmartServiceBooking.Shared.DTOs.Services
+@using SmartServiceBooking.Shared.DTOs.Categories
+@using SmartServiceBooking.Shared.DTOs.ServiceProvider
+
+<PageTitle>الرئيسية - SmartService Booking Platform - حلب</PageTitle>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="hero-badge">
+            <i class="bi bi-patch-check-fill text-primary"></i> منصة الصيانة والخدمات الذكية المعتمدة بحلب
+        </div>
+        
+        <h1 class="hero-title">
+            احجز أفضل المصلحين والفنيين في حلب <br />
+            <span class="text-primary">طاقة شمسية • كهرباء • ميكانيك</span>
+        </h1>
+        
+        <p class="hero-subtitle mx-auto">
+            ربط مباشر بينك وبين نخبة من مصلحي أحياء حلب المعتمدين (الفرقان، الحمدانية، الشهباء...) بالأسعار الحقيقية بالليرة السورية.
+        </p>
+
+        <!-- Search Box -->
+        <div class="col-lg-10 col-xl-9 mx-auto mt-4">
+            <div class="search-card">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text" @bind="SearchQuery" placeholder="ابحث عن خدمة (مثل: صيانة إنفيرتر، كهرباء...)" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 border-start border-end">
+                        <div class="search-input-group">
+                            <i class="bi bi-geo-alt text-danger"></i>
+                            <select @bind="SelectedLocation">
+                                <option value="">كل أحياء حلب</option>
+                                <option value="الفرقان">الفرقان</option>
+                                <option value="الحمدانية">الحمدانية</option>
+                                <option value="الشهباء">الشهباء</option>
+                                <option value="السليمانية">السليمانية / الميدان</option>
+                                <option value="الموغامبو">الموغامبو</option>
+                                <option value="سيف الدولة">سيف الدولة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="providers" class="btn btn-primary-gradient w-100 py-3">
+                            <i class="bi bi-map me-1"></i> تصفح الخريطة
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="d-flex flex-wrap justify-content-center gap-4 mt-5 pt-3">
+            <div class="d-flex align-items-center gap-2 text-secondary">
+                <i class="bi bi-shield-check text-success fs-4"></i>
+                <span class="fw-bold">+1,200 حجز ناجح بحلب</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-secondary">
+                <i class="bi bi-star-fill text-warning fs-4"></i>
+                <span class="fw-bold">4.9/5 متوسط تقييم العملاء</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-secondary">
+                <i class="bi bi-geo-alt-fill text-danger fs-4"></i>
+                <span class="fw-bold">تغطية كافة أحياء حلب</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h6 class="text-primary fw-bold text-uppercase mb-1">تصفح حسب المجالات</h6>
+                <h2 class="fw-extrabold mb-0">التصنيفات الرئيسية</h2>
+            </div>
+            <a href="services" class="btn btn-outline-custom">عرض جميع الخدمات <i class="bi bi-arrow-left ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var cat in Categories)
+            {
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="services" class="category-card text-center h-100 p-3">
+                        <div class="category-icon-wrapper mx-auto mb-2">
+                            <i class="bi @cat.IconClass fs-3"></i>
+                        </div>
+                        <div class="category-title fw-bold">@cat.Name</div>
+                        <div class="category-count text-muted small">@cat.ServiceCount خدمة بحلب</div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Services Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h6 class="text-primary fw-bold text-uppercase mb-1">الخدمات الأكثر طلباً بحلب</h6>
+                <h2 class="fw-extrabold mb-0">أبرز الخدمات المتاحة للحجز</h2>
+            </div>
+            <a href="services" class="btn btn-outline-custom">عرض كافة الخدمات <i class="bi bi-arrow-left ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var service in FeaturedServices)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card h-100 d-flex flex-column">
+                        <div class="service-card-header">
+                            <span class="service-badge">@service.CategoryName</span>
+                            <i class="bi @service.IconClass fs-1 text-primary"></i>
+                        </div>
+                        <div class="service-card-body d-flex flex-column flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h4 class="service-title mb-0 fw-bold">@service.Title</h4>
+                                <div class="service-rating">
+                                    <i class="bi bi-star-fill text-warning"></i> @service.Rating
+                                </div>
+                            </div>
+                            <p class="service-description flex-grow-1">@service.Description</p>
+                            
+                            <div class="service-meta mt-auto pt-3 border-top">
+                                <div>
+                                    <span class="text-muted small d-block">السعر يبدأ من</span>
+                                    <span class="service-price text-success fw-bold">@service.PriceFormattedSYP</span>
+                                    <span class="text-muted small d-block" style="font-size: 11px;">(@service.PriceFormattedUSD)</span>
+                                </div>
+                                <a href="services" class="btn btn-primary-gradient btn-sm px-3">
+                                    <i class="bi bi-calendar-event me-1"></i> احجز الآن
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Aleppo CTA -->
+<section class="py-5 text-white position-relative" style="background: var(--primary-gradient);">
+    <div class="container text-center py-4">
+        <div class="badge bg-white text-primary px-3 py-2 rounded-pill fw-bold mb-3">
+            <i class="bi bi-map-fill me-1"></i> خريطة حلب الرقمية
+        </div>
+        <h2 class="fw-extrabold display-6 mb-3">ابحث عن أقرب مصلح في حيك بنقرة واحدة!</h2>
+        <p class="fs-5 opacity-90 max-w-600 mx-auto mb-4">اختر حيك (الفرقان، الحمدانية، الشهباء...) وشاهد مواقع ورش الصيانة وأسعارهم مباشرة على الخريطة التفاعلية.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="providers" class="btn btn-light btn-lg px-4 fw-bold text-primary">
+                <i class="bi bi-geo-alt-fill me-2"></i> استعراض خريطة حلب والمصلحين
+            </a>
+            <a href="services" class="btn btn-outline-light btn-lg px-4 fw-bold">
+                تصفح قائمة الخدمات
+            </a>
+        </div>
+    </div>
+</section>
+
+@code {
+    private string SearchQuery { get; set; } = "";
+    private string SelectedLocation { get; set; } = "";
+
+    private record CategoryModel(long Id, string Name, string IconClass, int ServiceCount);
+    private record ServiceModel(long Id, string Title, string CategoryName, string Description, decimal PriceSYP, decimal PriceUSD, double Rating, string IconClass)
+    {
+        public string PriceFormattedSYP => $"{PriceSYP:N0} ل.س";
+        public string PriceFormattedUSD => $"${PriceUSD:N2}";
+    }
+
+    private List<CategoryModel> Categories = new()
+    {
+        new(1, "طاقة شمسية وبديلة", "bi-sun-fill", 15),
+        new(2, "كهرباء وتمديدات", "bi-lightning-charge-fill", 28),
+        new(3, "ميكانيك ومولدات", "bi-gear-wide-connected", 20),
+        new(4, "صيانة وتكييف", "bi-snow", 18),
+        new(5, "سباكة وصحية", "bi-droplet-fill", 14),
+        new(6, "أمن وكاميرات", "bi-camera-video-fill", 10)
+    };
+
+    private List<ServiceModel> FeaturedServices = new()
+    {
+        new(1, "صيانة وفحص إنفيرتر (Inverter)", "طاقة شمسية وبديلة", "كشف أعطال الشحن والتحويل وتبديل موسفتات وبرمجة أنظمة الطاقة والبطاريات بحلب.", 150000m, 10.00m, 4.9, "bi-sun"),
+        new(2, "صيانة قواطع وشبكة كهرباء منزلية", "كهرباء وتمديدات", "كشف أعطال الشورت والتسريب وفحص لوحات التوزيع وتمديد خطوط أمبير وبديل.", 90000m, 6.00m, 4.85, "bi-lightning-charge"),
+        new(3, "صيانة وضبط محركات المولدات", "ميكانيك ومولدات", "صيانة كربيراتير وتبديل فلاتر وفحص مارش ودينامو المولدات ومشاكل الإقلاع.", 180000m, 12.00m, 4.8, "bi-gear-wide"),
+        new(4, "تركيب وضبط منظومة طاقة شمسية", "طاقة شمسية وبديلة", "تركيب وتثبيت القواعد والألواح الشمسية مع التوصيل وحماية القواطع.", 300000m, 20.00m, 4.95, "bi-brightness-high"),
+        new(5, "صيانة مكيف وتعبئة غاز تبريد", "صيانة وتكييف", "تنظيف الفلاتر وفحص الكومبريسور وتعبئة غاز فريون أصلي للمكيفات والبرادات.", 225000m, 15.00m, 4.85, "bi-snow"),
+        new(6, "صيانة مضخات المياه والبالونات", "سباكة وصحية", "إصلاح توربين المضخة وتبديل مفتاح الأوتوماتيك والبالون وفحص تسريب المياه.", 120000m, 8.00m, 4.75, "bi-water")
+    };
+}

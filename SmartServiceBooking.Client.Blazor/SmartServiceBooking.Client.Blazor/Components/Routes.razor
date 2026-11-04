@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Authorization
+@using SmartServiceBooking.Client.Blazor.Auth
+@using SmartServiceBooking.Client.Blazor.Components.Layout
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+                <Authorizing>
+                    <div class="d-flex justify-content-center align-items-center p-5">
+                        <div class="spinner-border text-primary me-2" role="status"></div>
+                        <span class="text-muted">جاري التحقق من الصلاحيات...</span>
+                    </div>
+                </Authorizing>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <div class="container text-center py-5">
+                    <h2 class="display-6 fw-bold text-danger mb-3">404 - الصفحة غير موجودة</h2>
+                    <p class="text-muted">عذراً، المسار الذي تحاول الوصول إليه غير موجود.</p>
+                    <a href="/" class="btn btn-primary rounded-pill px-4 mt-2">العودة للرئيسية</a>
+                </div>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

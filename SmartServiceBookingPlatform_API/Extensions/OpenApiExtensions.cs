@@ -70,7 +70,7 @@ public static class OpenApiExtensions
     public static WebApplication UseOpenApiDocumentation(this WebApplication app)
     {
         var isDev            = app.Environment.IsDevelopment();
-        var opts             = app.Services.GetRequiredService<IOptions<ApiDocumentationOptions>>().Value;
+        var opts= app.Services.GetRequiredService<IOptions<ApiDocumentationOptions>>().Value;
         var shouldExposeSpec = isDev || opts.ExposeInProduction;
 
         // ── OpenAPI JSON endpoint: GET /openapi/v1.json ──────────────────────

@@ -190,7 +190,8 @@ CREATE TABLE [Service].[Services] (
     [CategoryId] INT NOT NULL,
     [Name] NVARCHAR(200) NOT NULL,
     [Description] NVARCHAR(MAX) NULL,
-    [BasePrice] DECIMAL(18,2) NOT NULL,
+    [BasePrice] DECIMAL(18,2) NOT NULL, -- In SYP (Syrian Pounds)
+    [PriceInUSD] DECIMAL(18,2) NULL, -- Secondary reference currency in USD
     [PriceUnit] NVARCHAR(20) NOT NULL, -- 'Fixed', 'Hourly'
     [IsActive] BIT NOT NULL DEFAULT 1,
 
@@ -212,6 +213,11 @@ CREATE TABLE [Service].[ServiceProviders] (
     [ReviewCount] INT NOT NULL DEFAULT 0,
     [IsVerified] BIT NOT NULL DEFAULT 0,
     [CommissionRate] DECIMAL(5, 2) NOT NULL DEFAULT 0, -- Percentage
+    [City] NVARCHAR(100) NOT NULL DEFAULT N'حلب',
+    [District] NVARCHAR(100) NULL,
+    [AddressDetails] NVARCHAR(300) NULL,
+    [Latitude] FLOAT NULL,
+    [Longitude] FLOAT NULL,
 
     [CreatedAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     [UpdatedAt] DATETIME2 NULL,
@@ -220,12 +226,16 @@ CREATE TABLE [Service].[ServiceProviders] (
     CONSTRAINT [FK_ServiceProviders_Users] FOREIGN KEY ([Id]) REFERENCES [Identity].[Users] ([Id])
 );
 GO
+CREATE INDEX [IX_ServiceProviders_District] ON [Service].[ServiceProviders] ([District]);
+CREATE INDEX [IX_ServiceProviders_City] ON [Service].[ServiceProviders] ([City]);
+GO
 
 CREATE TABLE [Service].[ProviderServices] (
     [Id] BIGINT IDENTITY(1,1) PRIMARY KEY,
     [ProviderId] NVARCHAR(450) NOT NULL,
     [ServiceId] BIGINT NOT NULL,
-    [CustomPrice] DECIMAL(18,2) NULL, -- Overrides BasePrice
+    [CustomPrice] DECIMAL(18,2) NULL, -- In SYP (Overrides BasePrice)
+    [CustomPriceInUSD] DECIMAL(18,2) NULL, -- In USD
     [IsActive] BIT NOT NULL DEFAULT 1,
 
     [CreatedAt] DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),

@@ -39,7 +39,12 @@ public class UpdateServiceProviderCommandHandler(
             businessName: request.BusinessName,
             bio: request.Bio,
             commissionRate: commissionRate,
-            isVerified: entity.IsVerified
+            isVerified: entity.IsVerified,
+            city: request.City,
+            district: request.District,
+            addressDetails: request.AddressDetails,
+            latitude: request.Latitude,
+            longitude: request.Longitude
         );
 
         await context.SaveChangesAsync(cancellationToken);

@@ -13,6 +13,7 @@
           "Scalar.AspNetCore": "2.11.6",
           "SmartServiceBooking.Application": "1.0.0",
           "SmartServiceBooking.Infrastructure": "1.0.0",
+          "SmartServiceBooking.Shared": "1.0.0",
           "Swashbuckle.AspNetCore.SwaggerUI": "10.1.0"
         },
         "runtime": {
@@ -1026,7 +1027,8 @@
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "14.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.1",
-          "SmartServiceBooking.Domain": "1.0.0"
+          "SmartServiceBooking.Domain": "1.0.0",
+          "SmartServiceBooking.Shared": "1.0.0"
         },
         "runtime": {
           "SmartServiceBooking.Application.dll": {
@@ -1060,6 +1062,14 @@
         },
         "runtime": {
           "SmartServiceBooking.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SmartServiceBooking.Shared/1.0.0": {
+        "runtime": {
+          "SmartServiceBooking.Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1553,6 +1563,11 @@
       "sha512": ""
     },
     "SmartServiceBooking.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SmartServiceBooking.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -89,10 +89,10 @@ public static class DependencyInjection
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        services.AddScoped<IServiceProviderRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.ServiceProviderRepository>();
-        services.AddScoped<IServiceRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.ServiceRepository>();
-        services.AddScoped<ICategoryRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.CategoryRepository>();
-        services.AddScoped<IBookingRepository, SmartServiceBooking.Infrastructure.Persistence.Repositories.BookingRepository>();
+        services.AddScoped<IServiceProviderRepository, Persistence.Repositories.ServiceProviderRepository>();
+        services.AddScoped<IServiceRepository, Persistence.Repositories.ServiceRepository>();
+        services.AddScoped<ICategoryRepository, Persistence.Repositories.CategoryRepository>();
+        services.AddScoped<IBookingRepository, Persistence.Repositories.BookingRepository>();
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         return services;

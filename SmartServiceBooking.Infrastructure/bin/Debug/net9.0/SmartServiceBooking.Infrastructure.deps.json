@@ -998,7 +998,8 @@
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "14.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.1",
-          "SmartServiceBooking.Domain": "1.0.0"
+          "SmartServiceBooking.Domain": "1.0.0",
+          "SmartServiceBooking.Shared": "1.0.0"
         },
         "runtime": {
           "SmartServiceBooking.Application.dll": {
@@ -1015,6 +1016,14 @@
         },
         "runtime": {
           "SmartServiceBooking.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SmartServiceBooking.Shared/1.0.0": {
+        "runtime": {
+          "SmartServiceBooking.Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1482,6 +1491,11 @@
       "sha512": ""
     },
     "SmartServiceBooking.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SmartServiceBooking.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

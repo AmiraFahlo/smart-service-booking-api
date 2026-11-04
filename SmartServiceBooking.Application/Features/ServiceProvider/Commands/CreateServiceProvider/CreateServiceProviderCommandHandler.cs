@@ -33,7 +33,12 @@ public class CreateServiceProviderCommandHandler(
             existingProvider.RestoreAndUpdate(
                 businessName: request.BusinessName,
                 bio: request.Bio,
-                newCommissionRate: isAdmin ? request.CommissionRate : null);
+                newCommissionRate: isAdmin ? request.CommissionRate : null,
+                city: request.City,
+                district: request.District,
+                addressDetails: request.AddressDetails,
+                latitude: request.Latitude,
+                longitude: request.Longitude);
 
             // 🔒 Concurrency guard: handles race conditions under high load
             try
@@ -60,6 +65,11 @@ public class CreateServiceProviderCommandHandler(
             businessName: request.BusinessName,
             bio: request.Bio,
             commissionRate: commissionRate,
+            city: request.City ?? "حلب",
+            district: request.District,
+            addressDetails: request.AddressDetails,
+            latitude: request.Latitude,
+            longitude: request.Longitude,
             id: targetUserId // 🛠️ Shared Primary Key (ServiceProvider.Id = UserId)
         );
 

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SmartServiceBooking.Application\SmartServiceBooking.Application.csproj" />
     <ProjectReference Include="..\SmartServiceBooking.Infrastructure\SmartServiceBooking.Infrastructure.csproj" />
+    <ProjectReference Include="..\SmartServiceBooking.Shared\SmartServiceBooking.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

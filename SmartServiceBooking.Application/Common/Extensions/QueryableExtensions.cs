@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using SmartServiceBooking.Domain.Shared;
 using System.Linq.Expressions;
 
 namespace SmartServiceBooking.Application.Common.Extensions;

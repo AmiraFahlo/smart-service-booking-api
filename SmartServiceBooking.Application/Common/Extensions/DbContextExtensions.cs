@@ -1,6 +1,3 @@
-using SmartServiceBooking.Application.Common.Interfaces;
-using SmartServiceBooking.Domain.Shared;
-
 namespace SmartServiceBooking.Application.Common.Extensions;
 
 public static class DbContextExtensions

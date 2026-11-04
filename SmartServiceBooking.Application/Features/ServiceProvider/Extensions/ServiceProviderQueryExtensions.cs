@@ -15,7 +15,12 @@ public static class ServiceProviderQueryExtensions
             IsVerified = p.IsVerified,
             Email = p.User != null ? p.User.Email : null,
             PhoneNumber = p.User != null ? p.User.PhoneNumber : null,
-            FullName = p.User != null ? p.User.FirstName + " " + p.User.LastName : null
+            FullName = p.User != null ? p.User.FirstName + " " + p.User.LastName : null,
+            City = p.City,
+            District = p.District,
+            AddressDetails = p.AddressDetails,
+            Latitude = p.Latitude,
+            Longitude = p.Longitude
         });
     }
 
@@ -28,7 +33,13 @@ public static class ServiceProviderQueryExtensions
             Rating = ps.Provider.Rating,
             ReviewCount = ps.Provider.ReviewCount,
             IsVerified = ps.Provider.IsVerified,
-            Price = ps.CustomPrice ?? ps.Service!.BasePrice
+            Price = ps.CustomPrice ?? ps.Service!.BasePrice,
+            PriceInUSD = ps.CustomPriceInUSD ?? ps.Service!.PriceInUSD,
+            City = ps.Provider.City,
+            District = ps.Provider.District,
+            AddressDetails = ps.Provider.AddressDetails,
+            Latitude = ps.Provider.Latitude,
+            Longitude = ps.Provider.Longitude
         });
     }
 }

@@ -35,7 +35,7 @@ public static class AuthorizationExtensions
                 .AddPolicy(PolicyNames.AdminOnly, policy =>
                     policy.RequireAuthenticatedUser()
                           .RequireRole("Admin"));
-
+  
         return services;
     }
 }
